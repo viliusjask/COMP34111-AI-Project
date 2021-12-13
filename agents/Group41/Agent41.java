@@ -1,7 +1,11 @@
+package agents.group41;
+
+import agents.Hex;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.io.*;
+import Group41.myclass;
 
 class Agent41{
     public static String HOST = "127.0.0.1";
@@ -149,7 +153,7 @@ class Agent41{
     	return -1;
     }
     
-    public static int minimax(int depth, int playerTurn, String player) {
+    public static int minimax(int[][] board, int depth, int playerTurn, String player, int alpha, int beta) {
     	//for i < movesAvailable
     	//	if player 0
     	//		makeMove()
@@ -216,3 +220,5 @@ class Agent41{
 // 		this.y = y;
 // 	}
 // }
+
+
