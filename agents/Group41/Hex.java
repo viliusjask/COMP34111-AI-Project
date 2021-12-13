@@ -3,13 +3,13 @@ package agents.group41;
 public class Hex {
     int x;
     int y;
-    int player;
-    int heurValue;
+    String player;
+    float heurValue;
 
     public Hex() {
     }
 
-    public Hex(int x, int y, int player, int heurValue) {
+    public Hex(int x, int y, String player, float heurValue) {
         this.x = x;
         this.y = y;
         this.player = player;
@@ -32,19 +32,19 @@ public class Hex {
         this.y = y;
     }
 
-    public int getPlayer() {
+    public String getPlayer() {
         return this.player;
     }
 
-    public void setPlayer(int player) {
+    public void setPlayer(String player) {
         this.player = player;
     }
 
-    public int getHeurValue() {
+    public float getHeurValue() {
         return this.heurValue;
     }
 
-    public void setHeurValue(int heurValue) {
+    public void setHeurValue(float heurValue) {
         this.heurValue = heurValue;
     }
 

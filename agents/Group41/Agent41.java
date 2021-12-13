@@ -1,11 +1,10 @@
 package agents.group41;
 
-import agents.Hex;
+import agents.group41.Hex;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.io.*;
-import Group41.myclass;
 
 class Agent41{
     public static String HOST = "127.0.0.1";
@@ -138,6 +137,7 @@ class Agent41{
 
     public static void main(String args[]){
         Agent41 agent = new Agent41();
+        Hex[][] hexBoard = new Hex[boardSize][boardSize];
         agent.run();
     }
     
@@ -153,72 +153,91 @@ class Agent41{
     	return -1;
     }
     
-    public static int minimax(int[][] board, int depth, int playerTurn, String player, int alpha, int beta) {
-    	//for i < movesAvailable
-    	//	if player 0
-    	//		makeMove()
-    	//		currentScore = minimax(depth+1, 1)
-    	//		max = max(currentScore, max)
-    	//	else
-    	// 		makeMove
-    	//		currentScore =minimax(depth+1, 0)
-    	//		min = min(currentScore, min)
+    public static float minimax(Hex position, int[][] board, int depth, String player, int alpha, int beta) {
+        if(depth == 0 || getAvailableMoves(board, position).size() == 0)
+        {
+            return position.getHeurValue();
+        }
+
+        ArrayList<Hex> possibleMoves;
+        possibleMoves = getAvailableMoves(board);
+
+        for(int i = 0; i < possibleMoves.size(); i++)
+        {
+            Hex bestMove = getBestMove();
+            // Make move
+            // board[x][y].setPlayer(player);
+
+            if(player == "B") // max player
+            {
+                float maxEval = Float.NEGATIVE_INFINITY;
+                for(int i = 0; i < possibleMoves.size(); i++)
+                    float eval = minimax(board, depth - 1, player, alpha, beta);
+                    maxEval = max(maxEval, eval);
+                    alpha = max(alpha, eval);
+                    if(beta <= alpha)
+                        break;
+                return maxEval;
+            } 
+            else if(player == "R") // min player
+            {
+                float minEval = Float.POSITIVE_INFINITY;
+                for(int i = 0; i < possibleMoves.size(); i++)
+                    int eval = minimax(board, depth - 1, player, alpha, beta);
+                    minEval = min(minEval, eval);
+                    beta = min(beta, eval);
+                    if(beta <= alpha)
+                        break;
+                return minEval;
+            }
+            //Undo Move
+            // board[currentMove.getX()][currentMove.getY()].setPlayer(null);
+        }
+            
     	return -1;
     }
     
-    public static int maxvalue(int[][] board, int alpha, int beta) {
-    	moves = getAvailableMoves(board);
-    	int bestValue = Integer.MIN_VALUE;
-    		for move in moves {
-    			int[][] updatedBoard = updateBoardWithMove(board, move, maxPlayer)
-                bestValue = max(bestValue, alphaBetaPrunedMiniMax(board: updatedBoard, maximizingPlayer: false, depth: depth-1, alpha: alpha, beta: beta))
-                alpha = max(alpha, bestValue)
-                if beta <= alpha {
-                	break
-                }
-    		}
-    	return bestValue;
-    }
+    // public static int maxvalue(Hex[][] board, int alpha, int beta) {
+    // 	moves = getAvailableMoves(board);
+    // 	int bestValue = Integer.MIN_VALUE;
+    // 		for move in moves {
+    // 			int[][] updatedBoard = updateBoardWithMove(board, move, maxPlayer)
+    //             bestValue = max(bestValue, alphaBetaPrunedMiniMax(board: updatedBoard, maximizingPlayer: false, depth: depth-1, alpha: alpha, beta: beta))
+    //             alpha = max(alpha, bestValue)
+    //             if beta <= alpha {
+    //             	break
+    //             }
+    // 		}
+    // 	return bestValue;
+    // }
     
-    public static ArrayList<Pair<Integer,Integer>> getAvailableMoves(int[][] board) {
-    	ArrayList<Pair> moves = new ArrayList<Pair<Integer,Integer>>();
+    public static ArrayList<Hex> getAvailableMoves(Hex[][] board, Hex position ) {
+    	ArrayList<Hex> moves = new ArrayList<Hex>();
     	for (int i = 0; i < boardSize; i++) 
         {
     		for (int j = 0; j < boardSize; j++) 
             {
-    			if(board[i][j] == 0) 
-    				moves.add(new Pair(i, j));
+                // near position TO BE ADDED
+    			if(board[i][j].getPlayer() == null) 
+    				moves.add(new Hex(i, j, null, board[i][j].getHeurValue()));
     		}
     	}
         return moves;
     }
     
-    public static void updateBoardWithMove(int[][] board, Pair<Integer,Integer> move, String player) {
+    public static void updateBoardWithMove(Hex[][] board, Pair<Hex> move, String player) {
     	// 1 for player red, 2 for player blue
-        int move1 = move.getKey();
-        int move2 = move.getValue();
+        int move1 = move.getX();
+        int move2 = move.getY();
     	if(player == "R") 
         {
-    		board[move1][move2] = 1;
+    		board[move1][move2].setPlayer("R");
     	}
     	else if(player == "B")
         {
-    		board[move1][move2] = 2;
+    		board[move1][move2].setPlayer("B");
     	}
     }
 }
-
-// public class BoardState {
-// 	public int x;
-// 	public int y;
-	
-// 	public int[] getContents() {
-// 		return (this.x this.y);
-// 	}
-// 	public void setContents(int x, int y) {
-// 		this.x = x;
-// 		this.y = y;
-// 	}
-// }
 
 
