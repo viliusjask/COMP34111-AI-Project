@@ -161,39 +161,52 @@ class NaiveAgent{
     	//		min = min(currentScore, min)
     	return 1;
     }
+    
     public static int maxvalue(int[][] board, int alpha, int beta) {
     	moves = getAvailableMoves(board);
-    	var bestValue = -Double.infinity
+    	int bestValue = Integer.MIN_VALUE;
     		for move in moves {
-    			let updatedBoard = updateBoardWithMove(board: board, move: Hex(position: move, value: .player))
+    			int[][] updatedBoard = updateBoardWithMove(board, move, maxPlayer)
                 bestValue = max(bestValue, alphaBetaPrunedMiniMax(board: updatedBoard, maximizingPlayer: false, depth: depth-1, alpha: alpha, beta: beta))
                 alpha = max(alpha, bestValue)
                 if beta <= alpha {
                 	break
                 }
     		}
-                return bestValue
+    	return bestValue;
     }
     
-    public static getAvailableMoves(int[][] board) {
+    public static ArrayList<int[]> getAvailableMoves(int[][] board) {
+    	ArrayList<int[]> moves = new ArrayList<int[]>();
     	private int count = 0;
     	for (int i = 0; i < boardSize; i++) {
     		for (int j = 0; j < boardSize; j++) {
-    			if board[i][j] == 0{
-    				count++
+    			if board[i][j] == 0 {
+    				int[] newMove = {i, j}
+    				moves.add(newMove);
     			}
     		}
     	}
-        return count;
+        return moves;
+    }
+    
+    public static void updateBoardWithMove(int[][] board, int[] move, boolean player) {
+    	// True for P1, false for P2
+    	if player {
+    		board[move[1]][move[2]] = 1;
+    	}
+    	else {
+    		board[move[1]][move[2]] = 2;
+    	}
     }
 }
 
-public class BoardState{
+public class BoardState {
 	public int x;
 	public int y;
 	
-	public int getContents() {
-		return this.x, this.y;
+	public int[] getContents() {
+		return (this.x this.y);
 	}
 	public void setContents(int x, int y) {
 		this.x = x;
