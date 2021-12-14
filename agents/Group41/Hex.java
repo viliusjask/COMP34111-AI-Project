@@ -4,7 +4,10 @@ public class Hex {
     int x;
     int y;
     String player;
-    float heurValue;
+    int heurValue;
+    
+    int pathLengthFromSource;
+    ArrayList<Hex> pathVerticesFromSource;
 
     public Hex() {
     }
@@ -14,6 +17,10 @@ public class Hex {
         this.y = y;
         this.player = player;
         this.heurValue = heurValue;
+    }
+    public void clearVertexCache() {
+    	this.pathLengthFromSource = Integer.MAX_VALUE;
+    	this.pathVerticesFromSource = new ArrayList<Hex>();
     }
 
     public int getX() {

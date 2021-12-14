@@ -239,15 +239,37 @@ class Agent41{
     }
 
     // Dijkstra heur
-    public static ArrayList<Hex> dijkstra(Hex[][] board, Hex source)
+    public static int dijkstra(Hex[][] board, String player)
     {
-
+    	ArrayList<Hex> vertices = new ArrayList<Hex>();
+    	for (int i = 0; i<boardsize; i++) {
+    		for (int j = 0; j<boardsize; j++) {
+        		vertices.add(board[i][j]);
+        	}
+    	}
+	
+    	//if (player == "R") {
+    	//	
+    	//	source = T;
+    	//	destination = D;
+    		
+    	//}
+    	//else {
+    	//	source = L;
+    	//	destination = R;
+    	//}
+    	for (int i = 0; i < vertices.size(); i++) {
+    		Hex vertex = vertices.get(i);
+    		vertex.clearVertexCache();
+    	}
+    	ArrayList<Hex> currentVertices = vertices;
+    	
     }
 
     // Connected nodes heur
     public static ArrayList<Hex> connectedNodes(Hex[][] board, Hex source)
     {
-
+    	
     }
 
     public static ArrayList<Hex> getPossibleMoves(Hex[][] board) {
@@ -268,10 +290,14 @@ class Agent41{
         int colNo[] = new int[]{0, 1, -1, 1, -1, 0};
         int posX = position.getX();
         int posY = position.getY();
-    	for (int i = 0; i < 6; ++i)
+    	for (int i = 0; i < 6; i++)
+    	{
     		if(board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == null && posX + rowNo[i] >= 0 && posX + rowNo[i] < boardSize
-               && posY + colNo[i] >= 0 && posY + colNo[i] < boardSize) 
+               && posY + colNo[i] >= 0 && posY + colNo[i] < boardSize)
+    		{
     			moves.add(new Hex(posX + rowNo[i], posY + colNo[i], null, position.getHeurValue());
+    		}
+    	}
         return moves;
     }
 
