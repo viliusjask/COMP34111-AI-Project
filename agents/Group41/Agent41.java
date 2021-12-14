@@ -159,13 +159,13 @@ class Agent41{
     public static Hex[][] dijkstraHelper(Hex[][] board, Hex source) {
         ArrayList<Hex> movesFromSource, movesFromPos;
         // Get moves from source
-        movesFromSource = getPossibleMoves(board, source);
+        movesFromSource = getNeighbours(board, source);
         for(int i = 0; i < movesFromSource.size(); i++)
         {
             int x = movesFromSource.get(i).getX();
             int y = movesFromSource.get(i).getY();
             Hex pos = board[x][y];
-            movesFromPos = getPossibleMoves(board, pos);
+            movesFromPos = getNeighbours(board, pos);
             for(int i = 0; i < movesFromPos.size(); i++)
             {
                 Hex neigh = movesFromPos.get(i);
@@ -178,6 +178,21 @@ class Agent41{
                 dijkstraHelper(board, neigh)
             }
         }
+    }
+
+    public static ArrayList<Hex> getNeighbours(Hex[][] board, Hex source)
+    {
+        ArrayList<Hex> moves = new ArrayList<Hex>();
+        int rowNo[] = new int[]{-1, -1, 0, 0, 1, 1};
+        int colNo[] = new int[]{0, 1, -1, 1, -1, 0};
+        int posX = position.getX();
+        int posY = position.getY();
+    	for (int i = 0; i < 6; ++i)
+    		if(board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == null) 
+    			moves.add(new Hex(posX + rowNo[i], posY + colNo[i], null, position.getHeurValue());
+    		
+    	}
+        return moves;
     }
     
     public static int evaluateBoard() { 
@@ -253,8 +268,6 @@ class Agent41{
             for (int j = 0; j < boardSize; j++)
     		    if(board[i][j].getPlayer() == null) 
     			    moves.add(new Hex(i, j, null, board[i][j].getHeurValue());
-    		
-    	}
         return moves;
     }
     
