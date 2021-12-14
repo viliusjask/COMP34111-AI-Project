@@ -400,6 +400,42 @@ class Agent41{
 
     public static ArrayList<Hex> selectStartingPosition(Hex[][] board)
     {
+        // -1 represent * 50-50 positions
+        // 1 change
+        int[][] swap_array= {
+                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, 
+                        {0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1},
+                        {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                        {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+                        {1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0},
+                        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    };
+                    
+        List<Pair<Integer,Integer>> maybePos = new List<Pair<Integer,Integer>>();
+        maybePos.Add(new Pair(0, 10));
+        maybePos.Add(new Pair(1, 8));
+        maybePos.Add(new Pair(1, 3));
+        maybePos.Add(new Pair(2, 1));
+        maybePos.Add(new Pair(3, 1));
+        maybePos.Add(new Pair(4, 1));
+        maybePos.Add(new Pair(5, 1));
+        maybePos.Add(new Pair(6, 1));
+        maybePos.Add(new Pair(7, 1));
+        maybePos.Add(new Pair(3, 10));
+        maybePos.Add(new Pair(4, 10));
+        maybePos.Add(new Pair(5, 10));
+        maybePos.Add(new Pair(6, 10));
+        maybePos.Add(new Pair(7, 10));
+        maybePos.Add(new Pair(8, 10));
+        maybePos.Add(new Pair(9, 2));
+        maybePos.Add(new Pair(9, 8));
+        maybePos.Add(new Pair(10, 1));
+
         return null;
     }
 
