@@ -445,10 +445,10 @@ class Agent41{
             maybePos.Add(new Pair(9, 8));
             maybePos.Add(new Pair(10, 1));
 
-            Random rand = new Random()
+            Random rand = new Random();
             int selectRandom = rand.nextInt(maybePos.size());
 
-            Pair<> p = maybePos.get(selectRandom);
+            Pair<Integer, Integer> p = maybePos.get(selectRandom);
             return new Hex(p.getKey(), p.getValue(), null, 0);
 
         }
