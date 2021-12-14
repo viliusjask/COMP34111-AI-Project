@@ -146,7 +146,7 @@ class Agent41{
         Hex bestMove = new Hex(-1, -1, colour, -1);
 
         ArrayList<Hex> possibleMoves;
-        possibleMoves = getPossibleMoves(board, position);
+        possibleMoves = getPossibleMoves(board);
         if(depth == 0 || possibleMoves.size() == 0)
         {
             int bestScore = getBoardState(board, player);
