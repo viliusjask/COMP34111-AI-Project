@@ -178,7 +178,7 @@ class Agent41{
                 if(newDist < neigh.getHeurValue())
                     board[neigh.getX()][neigh.getY()] = newDist;
 
-                if(board[neigh.getX()][neigh.getY()] == Float.POSITIVE_INFINITY)
+                if(board[neigh.getX()][neigh.getY()].getHeurValue() == Float.POSITIVE_INFINITY)
                     setOfMoves.add(neigh);
             }
         }
@@ -216,10 +216,8 @@ class Agent41{
         possibleMoves = getPossibleMoves(board, position);
 
         
-        // Hex bestMove = getBestMove();
-        // DECISION HERE TO BE ADDED
-        // Make move
-        // board[x][y].setPlayer(player);
+        Hex bestMove = getBestMove();
+        board[bestMove.getX()][bestMove.getY()].setPlayer(player);
 
         if(player == "B") // max player
         {
@@ -229,7 +227,11 @@ class Agent41{
                 maxEval = max(maxEval, eval);
                 alpha = max(alpha, eval);
                 if(beta <= alpha)
+                {
+                    //Undo Move
+                    board[bestMove.getX()][bestMove.getY()].setPlayer(null);
                     break;
+                }
             return maxEval;
         } 
         else if(player == "R") // min player
@@ -240,11 +242,15 @@ class Agent41{
                 minEval = min(minEval, eval);
                 beta = min(beta, eval);
                 if(beta <= alpha)
+                {
+                    //Undo Move
+                    board[bestMove.getX()][bestMove.getY()].setPlayer(null);
                     break;
+                }
             return minEval;
         }
         //Undo Move
-        // board[currentMove.getX()][currentMove.getY()].setPlayer(null);
+        board[bestMove.getX()][bestMove.getY()].setPlayer(null);
         
             
     	return -1;
@@ -266,8 +272,6 @@ class Agent41{
     
     public static ArrayList<Hex> getPossibleMoves(Hex[][] board) {
     	ArrayList<Hex> moves = new ArrayList<Hex>();
-        // int rowNo[] = new int[]{-1, -1, 0, 0, 1, 1};
-        // int colNo[] = new int[]{0, 1, -1, 1, -1, 0};
     	for (int i = 0; i < boardSize; i++)
             for (int j = 0; j < boardSize; j++)
     		    if(board[i][j].getPlayer() == null) 
@@ -281,7 +285,7 @@ class Agent41{
     }
 
     
-    public static void updateBoardWithMove(Hex[][] board, Pair<Hex> move, String player) {
+    public static void updateBoardWithMove(Hex[][] board, Hex move, String player) {
         int move1 = move.getX();
         int move2 = move.getY();
     	if(player == "R") 
