@@ -16,9 +16,9 @@ class Agent41{
     private BufferedReader in;
     
 
-    private String colour = "R";
+    private static String colour = "R";
     private int turn = 0;
-    private int boardSize = 11;
+    private static int boardSize = 11;
 
     private void Connect() throws UnknownHostException, IOException{
         s = new Socket(HOST, PORT);
