@@ -3,6 +3,7 @@ package agents.group41;
 import agents.group41.Hex;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Random;
 import java.io.*;
 
@@ -245,28 +246,87 @@ class Agent41{
 
     public static int dijkstra(Hex[][] board, Hex source)
     {
+    	boolean visited[][] = new boolean[boardSize][boardSize];
+        for (int i = 0; i < boardSize; i++) {
+        	for (int j = 0; j < boardSize; j++) {
+        		visited[i][j] = false;
+        	}
+        }
+
+        
     	ArrayList<Hex> vertices = new ArrayList<Hex>();
     	for (int i = 0; i<boardsize; i++) {
     		for (int j = 0; j<boardsize; j++) {
         		vertices.add(board[i][j]);
         	}
     	}
-	
-    	//if (player == "R") {
-    	//	
-    	//	source = T;
-    	//	destination = D;
-    		
-    	//}
-    	//else {
-    	//	source = L;
-    	//	destination = R;
-    	//}
+    	Hex L = new Hex(-1,0,"B",0);
+    	Hex R = new Hex(boardSize+1,0,"B",0);
+    	Hex T = new Hex(0,boardSize+1,"R",0);
+    	Hex D = new Hex(0,-1,"R",0);
+    	
+    	if (player == "R") {
+    		Hex source = T;
+    		Hex destination = D;
+    	}
+    	else if (player == "B") {
+    		Hex source = L;
+    		Hex destination = R;
+    	}
+    	
     	for (int i = 0; i < vertices.size(); i++) {
     		Hex vertex = vertices.get(i);
     		vertex.clearVertexCache();
     	}
     	ArrayList<Hex> currentVertices = vertices;
+    	source.pathLengthFromSource = 0;
+    	source.pathVerticesFromSource.add(source);
+    	
+    	
+    	Queue<E> verticesQueue = new PriorityQueue();
+    	
+    	if (player == "R") {
+    		for (int i = 0; i < boardSize; i++) {
+    			verticesQueue.add(board[0][i]);
+    			visited[0][i] = true;
+    		}
+    	}
+    	else if (player == "B") {
+    		for (int i = 0; i < boardSize; i++) {
+    			verticesQueue.add(board[i][0]);
+    			visited[i][0] = true;
+    		}
+    	}
+    	
+    	
+    	
+    	while (verticesQueue.size() != 0) {
+    		Hex currentVertex = verticesQueue.poll();
+    		ArrayList<Hex> neighbours = getNeighbours(board, currentVertex);
+    		for (int i = 0; i < neighbours.size(); i++) {
+    			currentNeighbour = neighbours.get(i);
+    			int neighDist = currentVertex.pathLengthFromSource() + 1;
+    			if (neighDist < currentNeighbour.pathLengthFromSource()) {
+    				currentNeighbour.pathLengthFromSource = neighDist;
+    				board[currentNeighbour.getX()][currentNeighbour.getY()].setPathLengthFromSource(neighDist);
+    			}
+    			
+    			
+    		    //int pathLengthFromSource;
+    		    //ArrayList<Hex> pathVerticesFromSource;
+    			
+    			
+    			
+    			if (!visited[currentNeighbour.getX()][currentNeighbour.getY()]) {
+    				verticesQueue.add(currentNeighbour);
+    				visited[currentNeighbour.getX()][currentNeighbour.getY()] = true;
+    			}
+    		}
+    		
+    	}
+    	
+    	
+    	
     	
     }
 

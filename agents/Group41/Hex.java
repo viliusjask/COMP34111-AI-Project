@@ -22,6 +22,26 @@ public class Hex {
     	this.pathLengthFromSource = Integer.MAX_VALUE;
     	this.pathVerticesFromSource = new ArrayList<Hex>();
     }
+    
+    public int getPathLengthFromSource() {
+        return this.pathLengthFromSource;
+    }
+    
+    public void setPathLengthFromSource(int pathLengthFromSource) {
+    	this.pathLengthFromSource = pathLengthFromSource;
+    }
+    
+    public ArrayList<Hex> getPathVerticesFromSource() {
+        return this.pathVerticesFromSource;
+    }
+    
+    public void setPathVerticesFromSource(ArrayList<Hex> pathVerticesFromSource) {
+    	this.pathVerticesFromSource = pathVerticesFromSource;
+    }
+    
+    public int getX() {
+        return this.x;
+    }
 
     public int getX() {
         return this.x;
