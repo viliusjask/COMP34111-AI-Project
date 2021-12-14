@@ -5,6 +5,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Collections;
 import java.io.*;
 
 class Agent41{
@@ -369,7 +370,7 @@ class Agent41{
                     if (length > 1)
                         ++count;
                     else if (length <= 1)
-                        counter--;
+                        count--;
                 }
         return count;
     }
