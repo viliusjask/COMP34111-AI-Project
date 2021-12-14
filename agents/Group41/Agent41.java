@@ -325,7 +325,7 @@ class Agent41{
     		Hex currentVertex = verticesQueue.poll();
     		ArrayList<Hex> neighbours = getNeighbours(board, currentVertex);
     		for (int i = 0; i < neighbours.size(); i++) {
-    			currentNeighbour = neighbours.get(i);
+    			Hex currentNeighbour = neighbours.get(i);
                 int neighDist = currentVertex.pathLengthFromSource();
                 if(currentNeighbour.getPlayer() != player)
                     neighDist++;
