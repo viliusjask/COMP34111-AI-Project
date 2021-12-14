@@ -325,7 +325,10 @@ class Agent41{
     		ArrayList<Hex> neighbours = getNeighbours(board, currentVertex);
     		for (int i = 0; i < neighbours.size(); i++) {
     			currentNeighbour = neighbours.get(i);
-    			int neighDist = currentVertex.pathLengthFromSource() + 1;
+                int neighDist = currentVertex.pathLengthFromSource();
+                if(currentNeighbour.getPlayer() != player)
+                    neighDist++;
+    			
     			if (neighDist < currentNeighbour.pathLengthFromSource()) {
     				currentNeighbour.pathLengthFromSource = neighDist;
     				board[currentNeighbour.getX()][currentNeighbour.getY()].setPathLengthFromSource(neighDist);
@@ -335,9 +338,7 @@ class Agent41{
     		    //int pathLengthFromSource;
     		    //ArrayList<Hex> pathVerticesFromSource;
     			
-    			
-    			
-    			if (!visited[currentNeighbour.getX()][currentNeighbour.getY()]) {
+    			if (!visited[currentNeighbour.getX()][currentNeighbour.getY()] || currentNeighbour.getPlayer() == player) {
     				verticesQueue.add(currentNeighbour);
     				visited[currentNeighbour.getX()][currentNeighbour.getY()] = true;
     			}
@@ -418,10 +419,11 @@ class Agent41{
         int posY = position.getY();
     	for (int i = 0; i < 6; i++)
     	{
-    		if(board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == null && posX + rowNo[i] >= 0 && posX + rowNo[i] < boardSize
-               && posY + colNo[i] >= 0 && posY + colNo[i] < boardSize)
+    		if( posX + rowNo[i] >= 0 && posX + rowNo[i] < boardSize &&
+                posY + colNo[i] >= 0 && posY + colNo[i] < boardSize &&
+                (board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == null || board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == position.getPlayer()))
     		{
-    			moves.add(new Hex(posX + rowNo[i], posY + colNo[i], null, position.getHeurValue());
+    			moves.add(new Hex(posX + rowNo[i], posY + colNo[i], position.getPlayer(), position.getHeurValue());
     		}
     	}
         return moves;
