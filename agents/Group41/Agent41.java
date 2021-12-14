@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Collections;
+import java.util.PriorityQueue;
 import java.io.*;
 
 class Agent41{
@@ -148,7 +149,7 @@ class Agent41{
         possibleMoves = getPossibleMoves(board, position);
         if(depth == 0 || possibleMoves.size() == 0)
         {
-            bestScore = getBoardState(board, marker);
+            int bestScore = getBoardState(board, player);
             bestMove.setHeurValue(bestScore);
             return bestMove;
         }
@@ -285,22 +286,19 @@ class Agent41{
     	Hex T = new Hex(0,boardSize+1,"R",0);
     	Hex D = new Hex(0,-1,"R",0);
     	
-    	if (player == "R") {
-    		Hex source = T;
-    		Hex destination = D;
-    	}
-    	else if (player == "B") {
-    		Hex source = L;
-    		Hex destination = R;
-    	}
+
+//     	if (player == "R") {
+//     		Hex source = T;
+//     		Hex destination = D;
+//     	}
+//     	else if (player == "B") {
+//     		Hex source = L;
+//     		Hex destination = R;
+//     	}
     	
-    	for (int i = 0; i < vertices.size(); i++) {
-    		Hex vertex = vertices.get(i);
-    		vertex.clearVertexCache();
-    	}
     	ArrayList<Hex> currentVertices = vertices;
-    	source.pathLengthFromSource = 0;
-    	source.pathVerticesFromSource.add(source);
+    	//source.pathLengthFromSource = 0;
+    	//source.pathVerticesFromSource.add(source);
     	
     	
     	Queue<Hex> verticesQueue = new PriorityQueue<Hex>();
