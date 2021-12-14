@@ -96,7 +96,7 @@ class Agent41{
 
             case "CHANGE":
                 if (msg[3].equals("END")) return false;
-                if (msg[1].equals("SWAP")) colour = opp(colour);
+                if (msg[1].equals("SWAP")) colour = selectOpponent(colour);
                 if (msg[3].equals(colour)) makeMove(msg[2]);
                 break;
 
@@ -156,7 +156,7 @@ class Agent41{
         int bestEval;
         if(player == "B") // max player
         {
-            bestEval = Integer.NEGATIVE_INFINITY;
+            bestEval = Integer.MIN_VALUE;
             for(int i = 0; i < possibleMoves.size(); i++)
             {
                 int currentX = possibleMoves.get(i).getX();
@@ -186,7 +186,7 @@ class Agent41{
         } 
         else if(player == "R") // min player
         {
-            bestEval = Integer.POSITIVE_INFINITY;
+            bestEval = Integer.MAX_VALUE;
             for(int i = 0; i < possibleMoves.size(); i++)
                 {
                     int currentX = possibleMoves.get(i).getX();
@@ -504,7 +504,7 @@ class Agent41{
         return bridges;
     }
 
-    boolean checkWinForBluePlayer(Hex[][] board) {
+    private static boolean checkWinForBluePlayer(Hex[][] board) {
         boolean found = false;
         boolean visited[][] = new boolean[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {
@@ -529,7 +529,7 @@ class Agent41{
         return found;
     }
 
-    boolean checkWinForRedPlayer(Hex[][] board) {
+    private static boolean checkWinForRedPlayer(Hex[][] board) {
         boolean found = false;
         boolean visited[][] = new boolean[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {
