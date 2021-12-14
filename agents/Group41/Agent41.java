@@ -160,10 +160,13 @@ class Agent41{
         ArrayList<Hex> movesFromSource, movesFromPos;
         // Get moves from source
         movesFromSource = getNeighbours(board, source);
-        for(int i = 0; i < movesFromSource.size(); i++)
+        Set<Hex> setOfMoves = new HashSet<Hex>(movesFromSource);
+        Iterator<Hex> itr = setOfStocks.iterator();
+        while(itr.hasNext())
         {
-            int x = movesFromSource.get(i).getX();
-            int y = movesFromSource.get(i).getY();
+            Hex move = itr.next();
+            int x = move.getX();
+            int y = move.getY();
             Hex pos = board[x][y];
             movesFromPos = getNeighbours(board, pos);
             for(int i = 0; i < movesFromPos.size(); i++)
@@ -175,7 +178,8 @@ class Agent41{
                 if(newDist < neigh.getHeurValue())
                     board[neigh.getX()][neigh.getY()] = newDist;
 
-                dijkstraHelper(board, neigh)
+                if(board[neigh.getX()][neigh.getY()] == Float.POSITIVE_INFINITY)
+                    setOfMoves.add(neigh);
             }
         }
     }
