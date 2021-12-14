@@ -321,11 +321,11 @@ class Agent41{
     }
 
     boolean checkWinForBluePlayer(Hex[][] board) {
-        boolean goalFound = false;
+        boolean found = false;
         boolean visited[][] = new boolean[boardSize][boardSize];
-        for (int i=0; i <boardSize; ++i) {
-        	for (int j=0; j<boardSize; ++j) {
-        		visited[i][j]=false;
+        for (int i = 0; i < boardSize; i++) {
+        	for (int j = 0; j< boardSize; j++) {
+        		visited[i][j] = false;
         	}
         }
         for (int i = 0; i < 1; ++i) {
@@ -338,15 +338,15 @@ class Agent41{
 
         for (int i = 0; i < boardSize; i++) {
             if (visited[boardSize - 1][i] == true) {
-                goalFound = true;
+                found = true;
                 break;
             }
         }
-        return goalFound;
+        return found;
     }
 
     boolean checkWinForRedPlayer(Hex[][] board) {
-        boolean goalFound = false;
+        boolean found = false;
         boolean visited[][] = new boolean[boardSize][boardSize];
         for (int i=0; i <boardSize; ++i) {
         	for (int j=0; j<boardSize; ++j) {
@@ -363,11 +363,11 @@ class Agent41{
 
         for (int i = 0; i < boardSize; i++) {
             if (visited[i][boardSize - 1] == true) {
-                goalFound = true;
+                found = true;
                 break;
             }
         }
-        return goalFound;
+        return found;
     }
 
     public static void DFS(Hex[][] board, int row, int col, boolean visited[][], int value)
