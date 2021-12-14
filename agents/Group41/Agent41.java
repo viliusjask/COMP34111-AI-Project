@@ -149,7 +149,7 @@ class Agent41{
         if(depth == 0 || possibleMoves.size() == 0)
         {
             bestScore = getBoardState(board, marker);
-            bestMove.setHeurValue(bestScore)
+            bestMove.setHeurValue(bestScore);
             return bestMove;
         }
 
