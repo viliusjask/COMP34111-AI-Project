@@ -7,6 +7,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Collections;
 import java.util.PriorityQueue;
+import java.util.Pair;
 import java.io.*;
 
 class Agent41{
@@ -398,45 +399,59 @@ class Agent41{
                 !visited[row][col] && board[row][col].getPlayer() == player;
     }
 
-    public static ArrayList<Hex> selectStartingPosition(Hex[][] board)
+    public static boolean shouldSwap(Hex firstOppMove)
     {
-        // -1 represent * 50-50 positions
-        // 1 change
         int[][] swap_array= {
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, 
-                        {0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1},
-                        {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                        {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                        {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                        {1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0},
-                        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, 
+                    {0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1},
+                    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+                    {1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0},
+                    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                     };
-                    
-        List<Pair<Integer,Integer>> maybePos = new List<Pair<Integer,Integer>>();
-        maybePos.Add(new Pair(0, 10));
-        maybePos.Add(new Pair(1, 8));
-        maybePos.Add(new Pair(1, 3));
-        maybePos.Add(new Pair(2, 1));
-        maybePos.Add(new Pair(3, 1));
-        maybePos.Add(new Pair(4, 1));
-        maybePos.Add(new Pair(5, 1));
-        maybePos.Add(new Pair(6, 1));
-        maybePos.Add(new Pair(7, 1));
-        maybePos.Add(new Pair(3, 10));
-        maybePos.Add(new Pair(4, 10));
-        maybePos.Add(new Pair(5, 10));
-        maybePos.Add(new Pair(6, 10));
-        maybePos.Add(new Pair(7, 10));
-        maybePos.Add(new Pair(8, 10));
-        maybePos.Add(new Pair(9, 2));
-        maybePos.Add(new Pair(9, 8));
-        maybePos.Add(new Pair(10, 1));
 
-        return null;
+        return swap_array[firstOppMove.getX()][firstOppMove.getY()] == 1;
+    }
+
+
+
+    public static Hex selectStartingPosition()
+    {
+        // If player is first to choose, select a random out of * positions
+        if(turn == 1)
+        {
+            ArrayList<Pair<Integer,Integer>> maybePos = new ArrayList<Pair<Integer,Integer>>();
+            maybePos.Add(new Pair(0, 10));
+            maybePos.Add(new Pair(1, 8));
+            maybePos.Add(new Pair(1, 3));
+            maybePos.Add(new Pair(2, 1));
+            maybePos.Add(new Pair(3, 1));
+            maybePos.Add(new Pair(4, 1));
+            maybePos.Add(new Pair(5, 1));
+            maybePos.Add(new Pair(6, 1));
+            maybePos.Add(new Pair(7, 1));
+            maybePos.Add(new Pair(3, 10));
+            maybePos.Add(new Pair(4, 10));
+            maybePos.Add(new Pair(5, 10));
+            maybePos.Add(new Pair(6, 10));
+            maybePos.Add(new Pair(7, 10));
+            maybePos.Add(new Pair(8, 10));
+            maybePos.Add(new Pair(9, 2));
+            maybePos.Add(new Pair(9, 8));
+            maybePos.Add(new Pair(10, 1));
+
+            Random rand = new Random()
+            int selectRandom = rand.nextInt(maybePos.size());
+
+            Pair<> p = maybePos.get(selectRandom);
+            return new Hex(p.getKey(), p.getValue(), null, 0);
+
+        }
     }
 
     public static ArrayList<Hex> getPossibleMoves(Hex[][] board) {
