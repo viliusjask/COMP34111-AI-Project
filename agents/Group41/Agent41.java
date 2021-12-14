@@ -374,7 +374,7 @@ class Agent41{
         return count;
     }
 
-    public static void DFS(Hex[][] board, row, col, boolean[][] visited, String player) 
+    public static void DFS(Hex[][] board, int row, int col, boolean[][] visited, String player) 
     {
         int rowNo[] = new int[]{-1, -1, 0, 0, 1, 1};
         int colNo[] = new int[]{0, 1, -1, 1, -1, 0};
@@ -387,7 +387,7 @@ class Agent41{
 
     }
 
-    public static boolean isSafe(Hex[][] board, row, col, boolean[][] visited, String player) 
+    public static boolean isSafe(Hex[][] board, int row, int col, boolean[][] visited, String player) 
     {
         return row >= 0 && row < boardSize &&
                 col >= 0 & col < boardSize &&
@@ -404,7 +404,7 @@ class Agent41{
     	for (int i = 0; i < boardSize; i++)
             for (int j = 0; j < boardSize; j++)
     		    if(board[i][j].getPlayer() == null) 
-    			    moves.add(new Hex(i, j, null, board[i][j].getHeurValue());
+    			    moves.add(new Hex(i, j, null, board[i][j].getHeurValue()));
 
         Collections.shuffle(moves); // shuffling the positions
         return moves;
@@ -423,7 +423,7 @@ class Agent41{
                 posY + colNo[i] >= 0 && posY + colNo[i] < boardSize &&
                 (board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == null || board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == position.getPlayer()))
     		{
-    			moves.add(new Hex(posX + rowNo[i], posY + colNo[i], position.getPlayer(), position.getHeurValue());
+    			moves.add(new Hex(posX + rowNo[i], posY + colNo[i], position.getPlayer(), position.getHeurValue()));
     		}
     	}
         return moves;
@@ -471,7 +471,7 @@ class Agent41{
         // All the bridge coordinate shifts
         ArrayList<Hex> bridges = new ArrayList<Hex>();
         if (position.getPlayer() != player){
-            return bridges
+            return bridges;
         }
         int posX = position.getX();
         int posY = position.getY();
@@ -501,7 +501,7 @@ class Agent41{
                 }
             }  
         }
-        return bridges
+        return bridges;
     }
 
     boolean checkWinForBluePlayer(Hex[][] board) {
