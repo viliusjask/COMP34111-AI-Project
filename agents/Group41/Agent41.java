@@ -7,7 +7,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Collections;
 import java.util.PriorityQueue;
-import java.util.Pair;
+import javafx.util.Pair;
 import java.io.*;
 
 class Agent41{
