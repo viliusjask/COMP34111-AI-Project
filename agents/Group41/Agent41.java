@@ -139,7 +139,6 @@ class Agent41{
             for (int j = 0; j < boardSize; j++)
                 hexBoard[i][j] = null;
         // Pass hexBoard in run?
-        agent.run();
     }
 
     public static Hex minimax(Hex[][] board, String player, int depth, int alpha, int beta) {
