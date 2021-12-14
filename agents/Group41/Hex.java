@@ -5,9 +5,7 @@ public class Hex {
     int y;
     String player;
     int heurValue;
-    
     int pathLengthFromSource;
-    ArrayList<Hex> pathVerticesFromSource;
 
     public Hex() {
     }
@@ -18,10 +16,6 @@ public class Hex {
         this.player = player;
         this.heurValue = heurValue;
     }
-    public void clearVertexCache() {
-    	this.pathLengthFromSource = Integer.MAX_VALUE;
-    	this.pathVerticesFromSource = new ArrayList<Hex>();
-    }
     
     public int getPathLengthFromSource() {
         return this.pathLengthFromSource;
@@ -29,14 +23,6 @@ public class Hex {
     
     public void setPathLengthFromSource(int pathLengthFromSource) {
     	this.pathLengthFromSource = pathLengthFromSource;
-    }
-    
-    public ArrayList<Hex> getPathVerticesFromSource() {
-        return this.pathVerticesFromSource;
-    }
-    
-    public void setPathVerticesFromSource(ArrayList<Hex> pathVerticesFromSource) {
-    	this.pathVerticesFromSource = pathVerticesFromSource;
     }
     
     public int getX() {
@@ -83,12 +69,12 @@ public class Hex {
             return false;
         }
         Hex hex = (Hex) o;
-        return x == hex.x && y == hex.y && player == hex.player && heurValue == hex.heurValue;
+        return x == hex.x && y == hex.y && Objects.equals(player, hex.player) && heurValue == hex.heurValue && pathLengthFromSource == hex.pathLengthFromSource;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, player, heurValue);
+        return Objects.hash(x, y, player, heurValue, pathLengthFromSource);
     }
 
     @Override
@@ -98,6 +84,7 @@ public class Hex {
             ", y='" + getY() + "'" +
             ", player='" + getPlayer() + "'" +
             ", heurValue='" + getHeurValue() + "'" +
+            ", pathLengthFromSource='" + getPathLengthFromSource() + "'" +
             "}";
     }
 
