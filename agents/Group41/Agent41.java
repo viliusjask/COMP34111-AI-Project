@@ -393,6 +393,11 @@ class Agent41{
                 !visited[row][col] && board[row][col].getPlayer() == player;
     }
 
+    public static ArrayList<Hex> selectStartingPosition(Hex[][] board)
+    {
+
+    }
+
     public static ArrayList<Hex> getPossibleMoves(Hex[][] board) {
     	ArrayList<Hex> moves = new ArrayList<Hex>();
     	for (int i = 0; i < boardSize; i++)
@@ -505,10 +510,10 @@ class Agent41{
         		visited[i][j] = false;
         	}
         }
-        for (int i = 0; i < 1; ++i) {
-            for (int j = 0; j < boardSize; ++j) {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
                 if (board[i][j].getPlayer() == "B" && !visited[i][j]) {
-                    DFS(game, i, j, visited, 2);
+                    DFS(game, i, j, visited, "B");
                 }
             }
         }
@@ -525,15 +530,15 @@ class Agent41{
     boolean checkWinForRedPlayer(Hex[][] board) {
         boolean found = false;
         boolean visited[][] = new boolean[boardSize][boardSize];
-        for (int i=0; i <boardSize; ++i) {
-        	for (int j=0; j<boardSize; ++j) {
+        for (int i = 0; i < boardSize; i++) {
+        	for (int j = 0; j< boardSize; j++) {
         		visited[i][j]=false;
         	}
         }
         for (int i = 0; i < boardSize; ++i) {
             for (int j = 0; j < 1; ++j) {
-                if (board[i][j].getPlayer() =="R" && !visited[i][j]) {
-                    DFS(game, i, j, visited, 1);
+                if (board[i][j].getPlayer() == "R" && !visited[i][j]) {
+                    DFS(game, i, j, visited, "R");
                 }
             }
         }
@@ -547,26 +552,6 @@ class Agent41{
         return found;
     }
 
-    public static void DFS(Hex[][] board, int row, int col, boolean visited[][], int value)
-    {
-
-    }
-
-    public static boolean isSafe(Hex[][] board, int row, int col, boolean visited[][], int value)
-    {
-
-    }
-
-    public static ArrayList<Hex> getLegalMoves(Hex[][] board, int marker) 
-    {
-
-    }
-
-    public static ArrayList<Hex> selectStartingPosition(Hex[][] board)
-    {
-
-    }
-
     public static boolean checkValidPositions(int x, int y)
     {
         return x >= 0 && x < boardSize && y >= 0 && y < boardSize;
@@ -577,49 +562,6 @@ class Agent41{
         if (c.equals("B")) return "R";
         return "None";
     }
-    
-    // public static Hex[][] dijkstra(Hex[][] board, Hex source) {
-    //     // initialise heuristics
-    // 	for (int i = 0; i < boardSize; i++)
-    //         for (int j = 0; j < boardSize; j++)
-    //         {
-    //             board[i][j].setHeurValue = Float.POSITIVE_INFINITY;
-    //         }
-    //     // Source distance is 0
-    //     board[source.getX()][source.getY()].setHeurValue(0);
-
-    //     dijkstraHelper(board, source)
-        
-    // 	return board;
-    // }
-    
-    // public static Hex[][] dijkstraHelper(Hex[][] board, Hex source) {
-    //     ArrayList<Hex> movesFromSource, movesFromPos;
-    //     // Get moves from source
-    //     movesFromSource = getNeighbours(board, source);
-    //     Set<Hex> setOfMoves = new HashSet<Hex>(movesFromSource);
-    //     Iterator<Hex> itr = setOfStocks.iterator();
-    //     while(itr.hasNext())
-    //     {
-    //         Hex move = itr.next();
-    //         int x = move.getX();
-    //         int y = move.getY();
-    //         Hex pos = board[x][y];
-    //         movesFromPos = getNeighbours(board, pos);
-    //         for(int i = 0; i < movesFromPos.size(); i++)
-    //         {
-    //             Hex neigh = movesFromPos.get(i);
-    //             // Considering distance from one neighbour to other as 1
-    //             // SET HEUR VALUE BACK TO INT SINCE WE ADD 1 ???
-    //             float newDist = pos.getHeurValue() + 1;
-    //             if(newDist < neigh.getHeurValue())
-    //                 board[neigh.getX()][neigh.getY()] = newDist;
-
-    //             if(board[neigh.getX()][neigh.getY()].getHeurValue() == Float.POSITIVE_INFINITY)
-    //                 setOfMoves.add(neigh);
-    //         }
-    //     }
-    // }
 
 }
 
