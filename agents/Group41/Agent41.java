@@ -226,7 +226,7 @@ class Agent41{
         if(checkWinForBluePlayer(board))
             return -1000;
         
-        int bridgeHeur = bridgeFactor(board);
+        int bridgeHeur = bridgeFactor(board, player);
         int dijkstraHuer = dijkstra(board);
 
         int playerScore = connectedNodes(board);
@@ -237,9 +237,29 @@ class Agent41{
     }
 
     // bridge heuristics
-    public static int bridgeFactor(Hex[][] board)
+    public static int bridgeFactor(Hex[][] board, String player)
     {
-
+        String opponent = selectOpponent(player);
+        int score = 0;
+        // Looping through the board
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if(board[i][j].getPlayer() != null) {
+                    // Get all the possible bridges for each piece
+                    ArrayList<Point> bridges = getPossibleBridges(board, board[i][j]);
+                    for (Hex h : bridges) {
+                        // Bridge exists for maximising player
+                        if (player == "B" && h.getPlayer() == "B") {
+                            score += 5;
+                        // Bridge exists for minimizing player
+                        } else if (player == "R" && h.getPlayer() == "R") {
+                            score += -5;
+                        }
+                    }
+                }
+            }
+        }
+        return score;
     }
 
     // Dijkstra heur
@@ -384,7 +404,7 @@ class Agent41{
         return moves;
     }
 
-    public static ArrayList<Hex> getNeighbours(Hex[][] board, Hex source)
+    public static ArrayList<Hex> getNeighbours(Hex[][] board, Hex position)
     {
         ArrayList<Hex> moves = new ArrayList<Hex>();
         int rowNo[] = new int[]{-1, -1, 0, 0, 1, 1};
@@ -402,9 +422,79 @@ class Agent41{
         return moves;
     }
 
-    public static ArrayList<Hex> getBridges(Hex[][] board, Hex source)
+    // Gets all the possible bridge positions for a hex, the two paths leading to the bridge must both be empty
+    // Returns an arraylist of the valid bridge positions
+    public static ArrayList<Hex> getPossibleBridges(Hex[][] board, Hex position)
     {
+        // All the bridge coordinate shifts
+        ArrayList<Hex> bridges = new ArrayList<Hex>();
+        int posX = position.getX();
+        int posY = position.getY();
+        // First Path leading to the bridge
+        int path1x[] = new int[]{1, 1, 1, -1, -1, -1};
+        int path1y[] = new int[]{0, -1, 0, 0, 1, 0};
+        // Second Path leading to the bridge
+        int path2x[] = new int[]{1, 0, 0, 0, 0, -1};
+        int path2y[] = new int[]{-1, -1, 1, -1, 1, 1};
+        // Final bridge positions
+        int finalx[] = new int[]{2, 1, 1, -1, -1, -2};
+        int finaly[] = new int[]{-1, -2, 1, -1, 2, 1};
 
+        for (int i = 0; i < 6; ++i) {
+            // Check path 1 empty
+            if (checkValidPosition(path1x[i]+posX, path1y[i]+posY) && board[posX + path1x[i]][posY + path1y[i]].getPlayer() == null ) {
+                // Check path 2 empty
+                if (checkValidPosition(path2x[i]+posX, path2y[i]+posY) && board[posX + path2x[i]][posY + path2y[i]].getPlayer() == null ) {
+                    // Check final bridge position valid
+                    if (checkValidPosition(finalx[i]+posX, finaly[i]+posY)) {
+                        String colour_bridge = board[finalx[i]+posX][finaly[i]+posY].getPlayer();
+                        bridges.add(new Hex(posX + finalx[i], posY + finaly[i], colour_bridge, position.getHeurValue()));
+                    }
+                }
+            }
+        }
+        return bridges;
+    }
+
+    // Gets all the instances where the player has a bridge with the opponent blocking one of the paths, the other being empty
+    // Returns the coordinates of the empty pathes of such bridges (should be priority moves)
+    public static ArrayList<Hex> getBridgesAtRisk(Hex[][] board, Hex position, String player)
+    {
+        String opponent = selectOpponent(player);
+        // All the bridge coordinate shifts
+        ArrayList<Hex> bridges = new ArrayList<Hex>();
+        if (position.getPlayer() != player){
+            return bridges
+        }
+        int posX = position.getX();
+        int posY = position.getY();
+        // First Path leading to the bridge
+        int path1x[] = new int[]{1, 1, 1, -1, -1, -1};
+        int path1y[] = new int[]{0, -1, 0, 0, 1, 0};
+        // Second Path leading to the bridge
+        int path2x[] = new int[]{1, 0, 0, 0, 0, -1};
+        int path2y[] = new int[]{-1, -1, 1, -1, 1, 1};
+        // Final bridge positions
+        int finalx[] = new int[]{2, 1, 1, -1, -1, -2};
+        int finaly[] = new int[]{-1, -2, 1, -1, 2, 1};
+        for (int i = 0; i < 6; ++i) {
+            // Check final bridge position has same coloured piece
+            if (checkValidPosition(finalx[i]+posX, finaly[i]+posY) && board[posX + finalx[i]][posY + finaly[i]].getPlayer() == player ) {
+                // Opponent in path 1, path 2 empty
+                if (checkValidPosition(path1x[i]+posX, path1y[i]+posY) && board[posX + path1x[i]][posY + path1y[i]].getPlayer() == opponent ) {
+                    if (checkValidPosition(path2x[i]+posX, path2y[i]+posY) && board[posX + path2x[i]][posY + path2y[i]].getPlayer() == null ) {
+                        bridges.add(new Hex(posX + path2x[i], posY + path2y[i], null, position.getHeurValue()));
+                    }
+                }
+                // Opponent in path 2, path 1 empty
+                else if (checkValidPosition(path1x[i]+posX, path1y[i]+posY) && board[posX + path1x[i]][posY + path1y[i]].getPlayer() == null ) {
+                    if (checkValidPosition(path2x[i]+posX, path2y[i]+posY) && board[posX + path2x[i]][posY + path2y[i]].getPlayer() == opponent ) {
+                        bridges.add(new Hex(posX + path1x[i], posY + path1y[i], null, position.getHeurValue()));
+                    }
+                }
+            }  
+        }
+        return bridges
     }
 
     boolean checkWinForBluePlayer(Hex[][] board) {
