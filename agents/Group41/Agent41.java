@@ -245,15 +245,14 @@ class Agent41{
     // 	return bestValue;
     // }
     
-    public static ArrayList<Hex> getPossibleMoves(Hex[][] board, Hex position ) {
+    public static ArrayList<Hex> getPossibleMoves(Hex[][] board) {
     	ArrayList<Hex> moves = new ArrayList<Hex>();
-        int rowNo[] = new int[]{-1, -1, 0, 0, 1, 1};
-        int colNo[] = new int[]{0, 1, -1, 1, -1, 0};
-        int posX = position.getX();
-        int posY = position.getY();
-    	for (int i = 0; i < 6; ++i)
-    		if(board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == null) 
-    			moves.add(new Hex(posX + rowNo[i], posY + colNo[i], null, position.getHeurValue());
+        // int rowNo[] = new int[]{-1, -1, 0, 0, 1, 1};
+        // int colNo[] = new int[]{0, 1, -1, 1, -1, 0};
+    	for (int i = 0; i < boardSize; i++)
+            for (int j = 0; j < boardSize; j++)
+    		    if(board[i][j].getPlayer() == null) 
+    			    moves.add(new Hex(i, j, null, board[i][j].getHeurValue());
     		
     	}
         return moves;
