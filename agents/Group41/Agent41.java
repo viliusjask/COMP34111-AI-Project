@@ -372,17 +372,19 @@ class Agent41{
         return count;
     }
 
-    public static void DFS(Hex[][] board, int row, int col, boolean[][] visited, String player) 
+    public static int DFS(Hex[][] board, int row, int col, boolean[][] visited, String player) 
     {
         int rowNo[] = new int[]{-1, -1, 0, 0, 1, 1};
         int colNo[] = new int[]{0, 1, -1, 1, -1, 0};
-
+        
+        int length = 0;
         visited[row][col] = true;
+        length++;
 
         for(int i = 0; i < 6; ++i)
             if(isSafe(board, row + rowNo[i], col + colNo[i], visited, player))
-                DFS(board, row + rowNo[i], col + colNo[i], visited, player);
-
+                length += DFS(board, row + rowNo[i], col + colNo[i], visited, player);
+        return length;
     }
 
     public static boolean isSafe(Hex[][] board, int row, int col, boolean[][] visited, String player) 
