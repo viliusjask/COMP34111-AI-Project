@@ -305,14 +305,18 @@ class Agent41{
     	
     	if (player == "R") {
     		for (int i = 0; i < boardSize; i++) {
-    			verticesQueue.add(board[0][i]);
-    			visited[0][i] = true;
+    			if (board[0][i].getPlayer() == "R" || board[0][i].getPlayer() == null) {
+    				verticesQueue.add(board[0][i]);
+        			visited[0][i] = true;
+    			}
     		}
     	}
     	else if (player == "B") {
     		for (int i = 0; i < boardSize; i++) {
-    			verticesQueue.add(board[i][0]);
-    			visited[i][0] = true;
+    			if (board[i][0].getPlayer() == "B" || board[i][0].getPlayer() == null) {
+        			verticesQueue.add(board[i][0]);
+        			visited[i][0] = true;
+    			}
     		}
     	}
     	
