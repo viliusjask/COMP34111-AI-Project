@@ -303,7 +303,7 @@ class Agent41{
     	source.pathVerticesFromSource.add(source);
     	
     	
-    	Queue<E> verticesQueue = new PriorityQueue();
+    	Queue<Hex> verticesQueue = new PriorityQueue<Hex>();
     	
     	if (player == "R") {
     		for (int i = 0; i < boardSize; i++) {
@@ -325,12 +325,12 @@ class Agent41{
     		ArrayList<Hex> neighbours = getNeighbours(board, currentVertex);
     		for (int i = 0; i < neighbours.size(); i++) {
     			Hex currentNeighbour = neighbours.get(i);
-                int neighDist = currentVertex.pathLengthFromSource();
+                int neighDist = currentVertex.getPathLengthFromSource();
                 if(currentNeighbour.getPlayer() != player)
                     neighDist++;
     			
-    			if (neighDist < currentNeighbour.pathLengthFromSource()) {
-    				currentNeighbour.pathLengthFromSource = neighDist;
+    			if (neighDist < currentNeighbour.getPathLengthFromSource()) {
+    				currentNeighbour.setPathLengthFromSource(neighDist);
     				board[currentNeighbour.getX()][currentNeighbour.getY()].setPathLengthFromSource(neighDist);
     			}
     			
