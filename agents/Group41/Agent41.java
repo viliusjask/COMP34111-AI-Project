@@ -227,11 +227,11 @@ class Agent41{
             return -1000;
         
         int bridgeHeur = bridgeFactor(board, player);
-        int dijkstraHuer = dijkstra(board);
+        int dijkstraHuer = dijkstra(board, player);
 
-        int playerScore = connectedNodes(board);
+        int playerScore = connectedNodes(board, player);
 
-        int opponentScore = connectedNodes(board);
+        int opponentScore = connectedNodes(board, player);
 
         return 6 * bridgeHeur + dijkstraHuer + (playerScore - opponentScore);
     }
@@ -246,7 +246,7 @@ class Agent41{
             for (int j = 0; j < boardSize; j++) {
                 if(board[i][j].getPlayer() != null) {
                     // Get all the possible bridges for each piece
-                    ArrayList<Point> bridges = getPossibleBridges(board, board[i][j]);
+                    ArrayList<Hex> bridges = getPossibleBridges(board, board[i][j]);
                     for (Hex h : bridges) {
                         // Bridge exists for maximising player
                         if (player == "B" && h.getPlayer() == "B") {
@@ -264,7 +264,7 @@ class Agent41{
 
     // Dijkstra heur
 
-    public static int dijkstra(Hex[][] board, Hex source)
+    public static int dijkstra(Hex[][] board, String player)
     {
     	boolean visited[][] = new boolean[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {
@@ -275,8 +275,8 @@ class Agent41{
 
         
     	ArrayList<Hex> vertices = new ArrayList<Hex>();
-    	for (int i = 0; i<boardsize; i++) {
-    		for (int j = 0; j<boardsize; j++) {
+    	for (int i = 0; i<boardSize; i++) {
+    		for (int j = 0; j<boardSize; j++) {
         		vertices.add(board[i][j]);
         	}
     	}
