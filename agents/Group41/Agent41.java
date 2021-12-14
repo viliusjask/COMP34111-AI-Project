@@ -515,7 +515,7 @@ class Agent41{
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 if (board[i][j].getPlayer() == "B" && !visited[i][j]) {
-                    DFS(game, i, j, visited, "B");
+                    DFS(board, i, j, visited, "B");
                 }
             }
         }
@@ -540,7 +540,7 @@ class Agent41{
         for (int i = 0; i < boardSize; ++i) {
             for (int j = 0; j < 1; ++j) {
                 if (board[i][j].getPlayer() == "R" && !visited[i][j]) {
-                    DFS(game, i, j, visited, "R");
+                    DFS(board, i, j, visited, "R");
                 }
             }
         }
@@ -554,7 +554,7 @@ class Agent41{
         return found;
     }
 
-    public static boolean checkValidPositions(int x, int y)
+    public static boolean checkValidPosition(int x, int y)
     {
         return x >= 0 && x < boardSize && y >= 0 && y < boardSize;
     }
