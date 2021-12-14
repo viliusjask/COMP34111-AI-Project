@@ -346,7 +346,7 @@ class Agent41{
     	
     	
     	
-    	
+    	return 0;
     }
 
     // Connected nodes heur
@@ -396,7 +396,7 @@ class Agent41{
 
     public static ArrayList<Hex> selectStartingPosition(Hex[][] board)
     {
-
+        return null;
     }
 
     public static ArrayList<Hex> getPossibleMoves(Hex[][] board) {
