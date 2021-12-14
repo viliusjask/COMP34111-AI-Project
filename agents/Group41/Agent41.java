@@ -141,58 +141,92 @@ class Agent41{
         agent.run();
     }
     
-    public static int findShortestPath() {
-    	//Djikstra's algorithm
-    	return -1;
+    public static Hex[][] dijkstra(Hex[][] board, Hex source) {
+        // initialise heuristics
+    	for (int i = 0; i < boardSize; i++)
+            for (int j = 0; j < boardSize; j++)
+            {
+                board[i][j].setHeurValue = Float.POSITIVE_INFINITY;
+            }
+        // Source distance is 0
+        board[source.getX()][source.getY()].setHeurValue(0);
+
+        dijkstraHelper(board, source)
+        
+    	return board;
     }
     
-    public static int evaluateBoard(BoardState boardState) { 
+    public static Hex[][] dijkstraHelper(Hex[][] board, Hex source) {
+        ArrayList<Hex> movesFromSource, movesFromPos;
+        // Get moves from source
+        movesFromSource = getPossibleMoves(board, source);
+        for(int i = 0; i < movesFromSource.size(); i++)
+        {
+            int x = movesFromSource.get(i).getX();
+            int y = movesFromSource.get(i).getY();
+            Hex pos = board[x][y];
+            movesFromPos = getPossibleMoves(board, pos);
+            for(int i = 0; i < movesFromPos.size(); i++)
+            {
+                Hex neigh = movesFromPos.get(i);
+                // Considering distance from one neighbour to other as 1
+                // SET HEUR VALUE BACK TO INT SINCE WE ADD 1 ???
+                float newDist = pos.getHeurValue() + 1;
+                if(newDist < neigh.getHeurValue())
+                    board[neigh.getX()][neigh.getY()] = newDist;
+
+                dijkstraHelper(board, neigh)
+            }
+        }
+    }
+    
+    public static int evaluateBoard() { 
     	//
     	//Implement and compare findShortestPath() somehow
     	//
     	return -1;
     }
     
-    public static float minimax(Hex position, int[][] board, int depth, String player, int alpha, int beta) {
-        if(depth == 0 || getAvailableMoves(board, position).size() == 0)
+    public static float minimax(Hex position, Hex[][] board, int depth, String player, int alpha, int beta) {
+        if(depth == 0 || getPossibleMoves(board, position).size() == 0)
         {
             return position.getHeurValue();
         }
 
         ArrayList<Hex> possibleMoves;
-        possibleMoves = getAvailableMoves(board);
+        possibleMoves = getPossibleMoves(board, position);
 
-        for(int i = 0; i < possibleMoves.size(); i++)
+        
+        // Hex bestMove = getBestMove();
+        // DECISION HERE TO BE ADDED
+        // Make move
+        // board[x][y].setPlayer(player);
+
+        if(player == "B") // max player
         {
-            Hex bestMove = getBestMove();
-            // Make move
-            // board[x][y].setPlayer(player);
-
-            if(player == "B") // max player
-            {
-                float maxEval = Float.NEGATIVE_INFINITY;
-                for(int i = 0; i < possibleMoves.size(); i++)
-                    float eval = minimax(board, depth - 1, player, alpha, beta);
-                    maxEval = max(maxEval, eval);
-                    alpha = max(alpha, eval);
-                    if(beta <= alpha)
-                        break;
-                return maxEval;
-            } 
-            else if(player == "R") // min player
-            {
-                float minEval = Float.POSITIVE_INFINITY;
-                for(int i = 0; i < possibleMoves.size(); i++)
-                    int eval = minimax(board, depth - 1, player, alpha, beta);
-                    minEval = min(minEval, eval);
-                    beta = min(beta, eval);
-                    if(beta <= alpha)
-                        break;
-                return minEval;
-            }
-            //Undo Move
-            // board[currentMove.getX()][currentMove.getY()].setPlayer(null);
+            float maxEval = Float.NEGATIVE_INFINITY;
+            for(int i = 0; i < possibleMoves.size(); i++)
+                float eval = minimax(possibleMoves.get(i), board, depth - 1, player, alpha, beta);
+                maxEval = max(maxEval, eval);
+                alpha = max(alpha, eval);
+                if(beta <= alpha)
+                    break;
+            return maxEval;
+        } 
+        else if(player == "R") // min player
+        {
+            float minEval = Float.POSITIVE_INFINITY;
+            for(int i = 0; i < possibleMoves.size(); i++)
+                int eval = minimax(possibleMoves.get(i), board, depth - 1, player, alpha, beta);
+                minEval = min(minEval, eval);
+                beta = min(beta, eval);
+                if(beta <= alpha)
+                    break;
+            return minEval;
         }
+        //Undo Move
+        // board[currentMove.getX()][currentMove.getY()].setPlayer(null);
+        
             
     	return -1;
     }
@@ -211,22 +245,27 @@ class Agent41{
     // 	return bestValue;
     // }
     
-    public static ArrayList<Hex> getAvailableMoves(Hex[][] board, Hex position ) {
+    public static ArrayList<Hex> getPossibleMoves(Hex[][] board, Hex position ) {
     	ArrayList<Hex> moves = new ArrayList<Hex>();
-    	for (int i = 0; i < boardSize; i++) 
-        {
-    		for (int j = 0; j < boardSize; j++) 
-            {
-                // near position TO BE ADDED
-    			if(board[i][j].getPlayer() == null) 
-    				moves.add(new Hex(i, j, null, board[i][j].getHeurValue()));
-    		}
+        int rowNo[] = new int[]{-1, -1, 0, 0, 1, 1};
+        int colNo[] = new int[]{0, 1, -1, 1, -1, 0};
+        int posX = position.getX();
+        int posY = position.getY();
+    	for (int i = 0; i < 6; ++i)
+    		if(board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == null) 
+    			moves.add(new Hex(posX + rowNo[i], posY + colNo[i], null, position.getHeurValue());
+    		
     	}
         return moves;
     }
     
+    // Possible implementation for some special case
+    public static ArrayList<Hex> checkBridges(Hex[][] board, Hex position ) {
+        report null;
+    }
+
+    
     public static void updateBoardWithMove(Hex[][] board, Pair<Hex> move, String player) {
-    	// 1 for player red, 2 for player blue
         int move1 = move.getX();
         int move2 = move.getY();
     	if(player == "R") 
