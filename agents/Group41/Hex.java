@@ -10,7 +10,7 @@ public class Hex {
     public Hex() {
     }
 
-    public Hex(int x, int y, String player, float heurValue) {
+    public Hex(int x, int y, String player, int heurValue) {
         this.x = x;
         this.y = y;
         this.player = player;
@@ -53,39 +53,13 @@ public class Hex {
         this.player = player;
     }
 
-    public float getHeurValue() {
+    public int getHeurValue() {
         return this.heurValue;
     }
 
-    public void setHeurValue(float heurValue) {
+    public void setHeurValue(int heurValue) {
         this.heurValue = heurValue;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Hex)) {
-            return false;
-        }
-        Hex hex = (Hex) o;
-        return x == hex.x && y == hex.y && Objects.equals(player, hex.player) && heurValue == hex.heurValue && pathLengthFromSource == hex.pathLengthFromSource;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y, player, heurValue, pathLengthFromSource);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-            " x='" + getX() + "'" +
-            ", y='" + getY() + "'" +
-            ", player='" + getPlayer() + "'" +
-            ", heurValue='" + getHeurValue() + "'" +
-            ", pathLengthFromSource='" + getPathLengthFromSource() + "'" +
-            "}";
-    }
 
 }
