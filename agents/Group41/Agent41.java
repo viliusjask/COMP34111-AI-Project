@@ -155,7 +155,7 @@ class Agent41{
         }
 
         int bestEval;
-        if(player == "B") // max player
+        if(player == "R") // max player
         {
             bestEval = Integer.MIN_VALUE;
             for(int i = 0; i < possibleMoves.size(); i++)
@@ -164,9 +164,9 @@ class Agent41{
                 int currentY = possibleMoves.get(i).getY();
                 Hex currentMove = board[currentX][currentY];
 
-                board[currentX][currentY].setPlayer("B");
+                board[currentX][currentY].setPlayer("R");
 
-                Hex eval = minimax(board, "R", depth - 1, alpha, beta);
+                Hex eval = minimax(board, "B", depth - 1, alpha, beta);
                 int evalVal = eval.getHeurValue();
                 if(bestEval < evalVal)
                 {
@@ -185,7 +185,7 @@ class Agent41{
                 
             }
         } 
-        else if(player == "R") // min player
+        else if(player == "B") // min player
         {
             bestEval = Integer.MAX_VALUE;
             for(int i = 0; i < possibleMoves.size(); i++)
@@ -194,9 +194,9 @@ class Agent41{
                     int currentY = possibleMoves.get(i).getY();
                     Hex currentMove = board[currentX][currentY];
 
-                    board[currentX][currentY].setPlayer("R");
+                    board[currentX][currentY].setPlayer("B");
              
-                    Hex eval = minimax(board, "B", depth - 1, alpha, beta);
+                    Hex eval = minimax(board, "R", depth - 1, alpha, beta);
                     int evalVal = eval.getHeurValue();
                     if(bestEval > evalVal)
                     {
@@ -250,10 +250,10 @@ class Agent41{
                     ArrayList<Hex> bridges = getPossibleBridges(board, board[i][j]);
                     for (Hex h : bridges) {
                         // Bridge exists for maximising player
-                        if (player == "B" && h.getPlayer() == "B") {
+                        if (player == "R" && h.getPlayer() == "R") {
                             score += 5;
                         // Bridge exists for minimizing player
-                        } else if (player == "R" && h.getPlayer() == "R") {
+                        } else if (player == "B" && h.getPlayer() == "B") {
                             score += -5;
                         }
                     }
