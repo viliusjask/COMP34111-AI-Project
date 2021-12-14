@@ -217,7 +217,7 @@ class Agent41{
         {
             float minEval = Float.POSITIVE_INFINITY;
             for(int i = 0; i < possibleMoves.size(); i++)
-                int eval = minimax(possibleMoves.get(i), board, depth - 1, player, alpha, beta);
+                float eval = minimax(possibleMoves.get(i), board, depth - 1, player, alpha, beta);
                 minEval = min(minEval, eval);
                 beta = min(beta, eval);
                 if(beta <= alpha)
