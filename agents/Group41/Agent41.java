@@ -18,7 +18,6 @@ class Agent41{
     private String colour = "R";
     private int turn = 0;
     private int boardSize = 11;
-    private int[][] board = new int[boardSize][boardSize];
 
     private void Connect() throws UnknownHostException, IOException{
         s = new Socket(HOST, PORT);
@@ -106,6 +105,7 @@ class Agent41{
         return true;
     }
 
+    // CALL minimax in this 
     private void makeMove(String board){
         if (turn == 2 && new Random().nextInt(2) == 1){
             sendMessage("SWAP\n");
@@ -133,7 +133,10 @@ class Agent41{
     public static void main(String args[]){
         Agent41 agent = new Agent41();
         Hex[][] hexBoard = new Hex[boardSize][boardSize];
-        minimax();
+        for (int i = 0; i < boardSize; i++)
+            for (int j = 0; j < boardSize; j++)
+                hexBoard[i][j] = null;
+        // Pass hexBoard in run?
         agent.run();
     }
 
@@ -239,7 +242,8 @@ class Agent41{
     }
 
     // Dijkstra heur
-    public static int dijkstra(Hex[][] board, String player)
+
+    public static int dijkstra(Hex[][] board, Hex source)
     {
     	ArrayList<Hex> vertices = new ArrayList<Hex>();
     	for (int i = 0; i<boardsize; i++) {
@@ -267,9 +271,46 @@ class Agent41{
     }
 
     // Connected nodes heur
-    public static ArrayList<Hex> connectedNodes(Hex[][] board, Hex source)
+    public static int connectedNodes(Hex[][] board, String player )
     {
-    	
+        boolean visited[][] = new boolean[boardSize][boardSize];
+        for(int i = 0; i < boardSize; i++)
+            for(int j = 0; j < boardSize; j++)
+                visited[i][j] = false;
+
+        int count = 0;
+        int length = 0;
+        for (int i = 0; i < boardSize; ++i)
+            for (int j = 0; j < boardSize; ++j)
+                if (board[i][j].getPlayer() == player && !visited[i][j]) 
+                {
+                    length = DFS(board, i, j, visited, player);
+                    if (length > 1)
+                        ++count;
+                    else if (length <= 1)
+                        counter--;
+                }
+        return count;
+    }
+
+    public static void DFS(Hex[][] board, row, col, boolean[][] visited, String player) 
+    {
+        int rowNo[] = new int[]{-1, -1, 0, 0, 1, 1};
+        int colNo[] = new int[]{0, 1, -1, 1, -1, 0};
+
+        visited[row][col] = true;
+
+        for(int i = 0; i < 6; ++i)
+            if(isSafe(board, row + rowNo[i], col + colNo[i], visited, player))
+                DFS(board, row + rowNo[i], col + colNo[i], visited, player);
+
+    }
+
+    public static boolean isSafe(Hex[][] board, row, col, boolean[][] visited, String player) 
+    {
+        return row >= 0 && row < boardSize &&
+                col >= 0 & col < boardSize &&
+                !visited[row][col] && board[row][col].getPlayer() == player;
     }
 
     public static ArrayList<Hex> getPossibleMoves(Hex[][] board) {
@@ -306,17 +347,54 @@ class Agent41{
 
     }
 
-
-    public static boolean checkWinForBluePlayer(Hex[][] board)
-    {
+    boolean checkWinForBluePlayer(Hex[][] board) {
+        boolean found = false;
         boolean visited[][] = new boolean[boardSize][boardSize];
+        for (int i = 0; i < boardSize; i++) {
+        	for (int j = 0; j< boardSize; j++) {
+        		visited[i][j] = false;
+        	}
+        }
+        for (int i = 0; i < 1; ++i) {
+            for (int j = 0; j < boardSize; ++j) {
+                if (board[i][j].getPlayer() == "B" && !visited[i][j]) {
+                    DFS(game, i, j, visited, 2);
+                }
+            }
+        }
 
+        for (int i = 0; i < boardSize; i++) {
+            if (visited[boardSize - 1][i] == true) {
+                found = true;
+                break;
+            }
+        }
+        return found;
     }
 
-    public static boolean checkWinForRedPlayer(Hex[][] board)
-    {
+    boolean checkWinForRedPlayer(Hex[][] board) {
+        boolean found = false;
         boolean visited[][] = new boolean[boardSize][boardSize];
+        for (int i=0; i <boardSize; ++i) {
+        	for (int j=0; j<boardSize; ++j) {
+        		visited[i][j]=false;
+        	}
+        }
+        for (int i = 0; i < boardSize; ++i) {
+            for (int j = 0; j < 1; ++j) {
+                if (board[i][j].getPlayer() =="R" && !visited[i][j]) {
+                    DFS(game, i, j, visited, 1);
+                }
+            }
+        }
 
+        for (int i = 0; i < boardSize; i++) {
+            if (visited[i][boardSize - 1] == true) {
+                found = true;
+                break;
+            }
+        }
+        return found;
     }
 
     public static void DFS(Hex[][] board, int row, int col, boolean visited[][], int value)
