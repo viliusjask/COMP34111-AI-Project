@@ -327,7 +327,7 @@ class Agent41{
 //     		Hex destination = R;
 //     	}
     	
-    	ArrayList<Hex> currentVertices = vertices;
+//    	ArrayList<Hex> currentVertices = vertices;
     	//source.pathLengthFromSource = 0;
     	//source.pathVerticesFromSource.add(source);
     	
@@ -384,8 +384,9 @@ class Agent41{
     		}
     		
     	}
-    	ArrayList<int> redList = new ArrayList<int>();
-    	ArrayList<int> blueList = new ArrayList<int>();
+    	ArrayList<Integer> redList = new ArrayList<Integer>();
+    	ArrayList<Integer> blueList = new ArrayList<Integer>();
+    	int minPath = Integer.MAX_VALUE;
     	
     	for (int i = 0; i < boardSize; i++) {
     		if (player == "R") {
