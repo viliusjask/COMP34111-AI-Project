@@ -275,16 +275,16 @@ class Agent41{
         }
 
         
-    	ArrayList<Hex> vertices = new ArrayList<Hex>();
-    	for (int i = 0; i<boardSize; i++) {
-    		for (int j = 0; j<boardSize; j++) {
-        		vertices.add(board[i][j]);
-        	}
-    	}
-    	Hex L = new Hex(-1,0,"B",0);
-    	Hex R = new Hex(boardSize+1,0,"B",0);
-    	Hex T = new Hex(0,boardSize+1,"R",0);
-    	Hex D = new Hex(0,-1,"R",0);
+//    	ArrayList<Hex> vertices = new ArrayList<Hex>();
+//    	for (int i = 0; i<boardSize; i++) {
+//    		for (int j = 0; j<boardSize; j++) {
+//        		vertices.add(board[i][j]);
+//        	}
+//    	}
+//    	Hex L = new Hex(-1,0,"B",0);
+//    	Hex R = new Hex(boardSize+1,0,"B",0);
+//    	Hex T = new Hex(0,boardSize+1,"R",0);
+//    	Hex D = new Hex(0,-1,"R",0);
     	
 
 //     	if (player == "R") {
@@ -300,6 +300,12 @@ class Agent41{
     	//source.pathLengthFromSource = 0;
     	//source.pathVerticesFromSource.add(source);
     	
+    	
+    	for (int i = 0; i < boardSize; i++) {
+    		for (int j = 0; j < boardSize; j++) {
+    			board[i][j].setPathLengthFromSource(Integer.MAX_VALUE);
+    		}
+    	}
     	
     	Queue<Hex> verticesQueue = new PriorityQueue<Hex>();
     	
@@ -347,10 +353,20 @@ class Agent41{
     		}
     		
     	}
+    	ArrayList<int> redList = new ArrayList<int>();
+    	ArrayList<int> blueList = new ArrayList<int>();
     	
-    	
-    	
-    	return 0;
+    	for (int i = 0; i < boardSize; i++) {
+    		if (player == "R") {
+    			redList.add(board[boardSize-1][i].getPathLengthFromSource());
+    			minPath = Collections.min(redList);
+    		}
+    		else if (player == "B") {
+    			blueList.add(board[i][boardSize-1].getPathLengthFromSource());
+    			minPath = Collections.min(blueList);
+    		}
+    	}
+    	return minPath;
     }
 
     // Connected nodes heur
