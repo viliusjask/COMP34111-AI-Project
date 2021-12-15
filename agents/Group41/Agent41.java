@@ -108,30 +108,61 @@ class Agent41{
         return true;
     }
 
-    // CALL minimax in this 
+    /// CALL minimax in this 
     private void makeMove(String board){
-        if (turn == 2 && new Random().nextInt(2) == 1){
-            sendMessage("SWAP\n");
-            return;
+        Hex[][] board_object = boardStringToArray(board);
+        // Swap Logic
+        if (turn == 2){
+            if(shouldSwap(getFirstMove(board_object))){
+                sendMessage("SWAP\n");
+                return;
+            }
         }
 
-        String[] lines = board.split(",");
-        ArrayList<int[]> choices = new ArrayList<int[]>();
+        // Get the best move
+        Hex bestMove = minimax(board_object, colour, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
-        for (int i = 0; i < boardSize; i++)
-            for (int j = 0; j < boardSize; j++)
-                if (lines[i].charAt(j) == '0'){
-                    int[] newElement = {i, j};
-                    choices.add(newElement);
-                }
-
-        if (choices.size() > 0){
-            int[] choice = choices.get(new Random().nextInt(choices.size()));
-            String msg = "" + choice[0] + "," + choice[1] + "\n";
+        if (bestMove != null){
+            String msg = "" + bestMove.getX() + "," + bestMove.getY() + "\n";
             sendMessage(msg);
         }
     }
 
+    // Should only be called on turn if minimizing player for swap rule
+    public static Hex getFirstMove(Hex[][] board){
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (board[i][j].getPlayer() != null){
+                    return board[i][j];
+                }
+            }
+        }
+        return null;
+    }
+
+    // Converts the board string from the server into an array of Hex objects
+    public static Hex[][] boardStringToArray(String board){
+        String[] lines = board.split(",");
+        Hex[][] hexBoard = new Hex[boardSize][boardSize];
+        for (int j = 0; j < board.length(); j++){
+            for (int i = 0; i < lines[j].length(); i++){ 
+                Hex h = new Hex(i, j, null, -1);
+                switch (lines[j].charAt(i)){
+                    case '0':
+                        hexBoard[i][j] = h;
+                        break;
+                    case 'R':
+                        h.setPlayer("R");
+                        hexBoard[i][j] = h;
+                        break;
+                    case 'B':
+                        h.setPlayer("B");
+                        hexBoard[i][j] = h;
+                }        
+            }
+        }
+        return hexBoard;
+    }
 
     public static void main(String args[]){
         Agent41 agent = new Agent41();
@@ -447,7 +478,7 @@ class Agent41{
         Random rand = new Random();
         int noOfPairs = 18;
 
-        int p = maybePos.get(selectRandom);
+        int p = rand.nextInt(noOfPairs);
         return new Hex(maybePos[p][0], maybePos[p][1], null, 0);
     }
 
@@ -618,5 +649,4 @@ class Agent41{
     }
 
 }
-
 
