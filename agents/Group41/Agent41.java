@@ -108,24 +108,36 @@ class Agent41{
         return true;
     }
 
-    // CALL minimax in this 
+    /// CALL minimax in this 
     private void makeMove(String board){
+        Hex[][] board_object = boardStringToArray(board);
         // Swap Logic
         if (turn == 2){
-            sendMessage("SWAP\n");
-            return;
+            if(shouldSwap(getFirstMove(board_object))){
+                sendMessage("SWAP\n");
+                return;
+            }
         }
 
-        // Interpret the board
-        Hex[][] board_object = boardStringToArray(board);
-
         // Get the best move
-        Hex bestMove = minimax(board_object, colour, 2, Integer.MIN_VALUE, Integer.MAX_VALUE)
+        Hex bestMove = minimax(board_object, colour, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
         if (bestMove != null){
             String msg = "" + bestMove.getX() + "," + bestMove.getY() + "\n";
             sendMessage(msg);
         }
+    }
+
+    // Should only be called on turn if minimizing player for swap rule
+    public static Hex getFirstMove(Hex[][] board){
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (board[i][j].getPlayer() != null){
+                    return board[i][j];
+                }
+            }
+        }
+        return null;
     }
 
     // Converts the board string from the server into an array of Hex objects
