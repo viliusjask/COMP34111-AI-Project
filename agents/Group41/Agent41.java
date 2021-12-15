@@ -7,7 +7,6 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Collections;
 import java.util.PriorityQueue;
-import javafx.util.Pair;
 import java.io.*;
 
 class Agent41{
@@ -412,7 +411,7 @@ class Agent41{
                     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                     {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
                     {1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0},
-                    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
                     };
 
         return swap_array[firstOppMove.getX()][firstOppMove.getY()] == 1;
@@ -423,35 +422,17 @@ class Agent41{
     public static Hex selectStartingPosition()
     {
         // If player is first to choose, select a random out of * positions
-        if(turn == 1)
-        {
-            ArrayList<Pair<Integer,Integer>> maybePos = new ArrayList<Pair<Integer,Integer>>();
-            maybePos.Add(new Pair(0, 10));
-            maybePos.Add(new Pair(1, 8));
-            maybePos.Add(new Pair(1, 3));
-            maybePos.Add(new Pair(2, 1));
-            maybePos.Add(new Pair(3, 1));
-            maybePos.Add(new Pair(4, 1));
-            maybePos.Add(new Pair(5, 1));
-            maybePos.Add(new Pair(6, 1));
-            maybePos.Add(new Pair(7, 1));
-            maybePos.Add(new Pair(3, 10));
-            maybePos.Add(new Pair(4, 10));
-            maybePos.Add(new Pair(5, 10));
-            maybePos.Add(new Pair(6, 10));
-            maybePos.Add(new Pair(7, 10));
-            maybePos.Add(new Pair(8, 10));
-            maybePos.Add(new Pair(9, 2));
-            maybePos.Add(new Pair(9, 8));
-            maybePos.Add(new Pair(10, 1));
+        int[][] maybePos = { {0, 10}, {1, 8}, {1, 3}, {2, 1}, {3, 1}, {4, 1},
+                             {5, 1}, {6, 1}, {7, 1}, {3, 10}, {4, 10}, {5, 10},
+                             {6, 10}, {7, 10}, {8, 10}, {9, 2}, {9, 8}, {10, 1}
+                           }; 
+        
 
-            Random rand = new Random();
-            int selectRandom = rand.nextInt(maybePos.size());
+        Random rand = new Random();
+        int noOfPairs = 18;
 
-            Pair<Integer, Integer> p = maybePos.get(selectRandom);
-            return new Hex(p.getKey(), p.getValue(), null, 0);
-
-        }
+        int p = maybePos.get(selectRandom);
+        return new Hex(maybePos[p][0], maybePos[p][1], null, 0);
     }
 
     public static ArrayList<Hex> getPossibleMoves(Hex[][] board) {
