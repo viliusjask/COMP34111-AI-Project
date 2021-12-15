@@ -259,7 +259,7 @@ class Agent41{
             return -1000;
         
         int bridgeHeur = bridgeFactor(board, player);
-        int dijkstraHuer = dijkstra(board, player);
+        int dijkstraHuer = dijkstra(board, player) - dijkstra(board, selectOpponent(player));
 
         int playerScore = connectedNodes(board, player);
 
