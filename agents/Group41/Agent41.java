@@ -108,19 +108,28 @@ class Agent41{
         return true;
     }
 
-    /// CALL minimax in this 
-    private void makeMove(String board){
-        Hex[][] board_object = boardStringToArray(board);
+    // CALL minimax in this 
+    private void makeMove(String board_str){
+        Hex[][] board = boardStringToArray(board_str);
         // Swap Logic
         if (turn == 2){
-            if(shouldSwap(getFirstMove(board_object))){
+            if(shouldSwap(getFirstMove(board))){
                 sendMessage("SWAP\n");
                 return;
             }
         }
+        // Check if any bridges are at risk
 
-        // Get the best move
-        Hex bestMove = minimax(board_object, colour, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        ArrayList<Hex> bridge_moves = getBridgesAtRisk(board, colour);
+        Hex bestMove;
+        if (bridge_moves.size() > 0){
+            // Prioritize connecting a bridge
+            bestMove = bridge_moves.get(0);
+        }
+        else {
+            // Get the best move
+            bestMove = minimax(board, colour, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        }
 
         if (bestMove != null){
             String msg = "" + bestMove.getX() + "," + bestMove.getY() + "\n";
@@ -549,16 +558,11 @@ class Agent41{
 
     // Gets all the instances where the player has a bridge with the opponent blocking one of the paths, the other being empty
     // Returns the coordinates of the empty pathes of such bridges (should be priority moves)
-    public static ArrayList<Hex> getBridgesAtRisk(Hex[][] board, Hex position, String player)
+    public static ArrayList<Hex> getBridgesAtRisk(Hex[][] board, String player)
     {
         String opponent = selectOpponent(player);
         // All the bridge coordinate shifts
         ArrayList<Hex> bridges = new ArrayList<Hex>();
-        if (position.getPlayer() != player){
-            return bridges;
-        }
-        int posX = position.getX();
-        int posY = position.getY();
         // First Path leading to the bridge
         int path1x[] = new int[]{1, 1, 1, -1, -1, -1};
         int path1y[] = new int[]{0, -1, 0, 0, 1, 0};
@@ -568,23 +572,37 @@ class Agent41{
         // Final bridge positions
         int finalx[] = new int[]{2, 1, 1, -1, -1, -2};
         int finaly[] = new int[]{-1, -2, 1, -1, 2, 1};
-        for (int i = 0; i < 6; ++i) {
-            // Check final bridge position has same coloured piece
-            if (checkValidPosition(finalx[i]+posX, finaly[i]+posY) && board[posX + finalx[i]][posY + finaly[i]].getPlayer() == player ) {
-                // Opponent in path 1, path 2 empty
-                if (checkValidPosition(path1x[i]+posX, path1y[i]+posY) && board[posX + path1x[i]][posY + path1y[i]].getPlayer() == opponent ) {
-                    if (checkValidPosition(path2x[i]+posX, path2y[i]+posY) && board[posX + path2x[i]][posY + path2y[i]].getPlayer() == null ) {
-                        bridges.add(new Hex(posX + path2x[i], posY + path2y[i], null, position.getHeurValue()));
-                    }
+
+        // Loop through each hex
+        for (int x = 0; x < boardSize; x++){
+            for (int y = 0; y < boardSize; y++){
+                Hex position = board[x][y];
+                if (position.getPlayer() != player){
+                    continue;
                 }
-                // Opponent in path 2, path 1 empty
-                else if (checkValidPosition(path1x[i]+posX, path1y[i]+posY) && board[posX + path1x[i]][posY + path1y[i]].getPlayer() == null ) {
-                    if (checkValidPosition(path2x[i]+posX, path2y[i]+posY) && board[posX + path2x[i]][posY + path2y[i]].getPlayer() == opponent ) {
-                        bridges.add(new Hex(posX + path1x[i], posY + path1y[i], null, position.getHeurValue()));
-                    }
+                int posX = position.getX();
+                int posY = position.getY();
+
+                for (int i = 0; i < 6; i++) {
+                    // Check final bridge position has same coloured piece
+                    if (checkValidPosition(finalx[i]+posX, finaly[i]+posY) && board[posX + finalx[i]][posY + finaly[i]].getPlayer() == player ) {
+                        // Opponent in path 1, path 2 empty
+                        if (checkValidPosition(path1x[i]+posX, path1y[i]+posY) && board[posX + path1x[i]][posY + path1y[i]].getPlayer() == opponent ) {
+                            if (checkValidPosition(path2x[i]+posX, path2y[i]+posY) && board[posX + path2x[i]][posY + path2y[i]].getPlayer() == null ) {
+                                bridges.add(new Hex(posX + path2x[i], posY + path2y[i], null, position.getHeurValue()));
+                            }
+                        }
+                        // Opponent in path 2, path 1 empty
+                        else if (checkValidPosition(path1x[i]+posX, path1y[i]+posY) && board[posX + path1x[i]][posY + path1y[i]].getPlayer() == null ) {
+                            if (checkValidPosition(path2x[i]+posX, path2y[i]+posY) && board[posX + path2x[i]][posY + path2y[i]].getPlayer() == opponent ) {
+                                bridges.add(new Hex(posX + path1x[i], posY + path1y[i], null, position.getHeurValue()));
+                            }
+                        }
+                    }  
                 }
-            }  
+            }
         }
+        
         return bridges;
     }
 
