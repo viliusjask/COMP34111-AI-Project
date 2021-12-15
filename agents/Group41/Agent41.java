@@ -155,7 +155,7 @@ class Agent41{
         }
 
         int bestEval;
-        if(player == "B") // max player
+        if(player == "R") // max player
         {
             bestEval = Integer.MIN_VALUE;
             for(int i = 0; i < possibleMoves.size(); i++)
@@ -164,9 +164,9 @@ class Agent41{
                 int currentY = possibleMoves.get(i).getY();
                 Hex currentMove = board[currentX][currentY];
 
-                board[currentX][currentY].setPlayer("B");
+                board[currentX][currentY].setPlayer("R");
 
-                Hex eval = minimax(board, "R", depth - 1, alpha, beta);
+                Hex eval = minimax(board, "B", depth - 1, alpha, beta);
                 int evalVal = eval.getHeurValue();
                 if(bestEval < evalVal)
                 {
@@ -185,7 +185,7 @@ class Agent41{
                 
             }
         } 
-        else if(player == "R") // min player
+        else if(player == "B") // min player
         {
             bestEval = Integer.MAX_VALUE;
             for(int i = 0; i < possibleMoves.size(); i++)
@@ -194,9 +194,9 @@ class Agent41{
                     int currentY = possibleMoves.get(i).getY();
                     Hex currentMove = board[currentX][currentY];
 
-                    board[currentX][currentY].setPlayer("R");
+                    board[currentX][currentY].setPlayer("B");
              
-                    Hex eval = minimax(board, "B", depth - 1, alpha, beta);
+                    Hex eval = minimax(board, "R", depth - 1, alpha, beta);
                     int evalVal = eval.getHeurValue();
                     if(bestEval > evalVal)
                     {
@@ -250,10 +250,10 @@ class Agent41{
                     ArrayList<Hex> bridges = getPossibleBridges(board, board[i][j]);
                     for (Hex h : bridges) {
                         // Bridge exists for maximising player
-                        if (player == "B" && h.getPlayer() == "B") {
+                        if (player == "R" && h.getPlayer() == "R") {
                             score += 5;
                         // Bridge exists for minimizing player
-                        } else if (player == "R" && h.getPlayer() == "R") {
+                        } else if (player == "B" && h.getPlayer() == "B") {
                             score += -5;
                         }
                     }
@@ -400,8 +400,6 @@ class Agent41{
 
     public static boolean shouldSwap(Hex firstOppMove)
     {
-        // -1 represent * 50-50 positions
-        // 1 change
         int[][] swap_array= {
                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, 
                     {0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1},
@@ -413,7 +411,7 @@ class Agent41{
                     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                     {0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
                     {1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0},
-                    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
                     };
 
         return swap_array[firstOppMove.getX()][firstOppMove.getY()] == 1;
@@ -424,35 +422,17 @@ class Agent41{
     public static Hex selectStartingPosition()
     {
         // If player is first to choose, select a random out of * positions
-        if(turn == 1)
-        {
-            List<Pair<Integer,Integer>> maybePos = new List<Pair<Integer,Integer>>();
-            maybePos.Add(new Pair(0, 10));
-            maybePos.Add(new Pair(1, 8));
-            maybePos.Add(new Pair(1, 3));
-            maybePos.Add(new Pair(2, 1));
-            maybePos.Add(new Pair(3, 1));
-            maybePos.Add(new Pair(4, 1));
-            maybePos.Add(new Pair(5, 1));
-            maybePos.Add(new Pair(6, 1));
-            maybePos.Add(new Pair(7, 1));
-            maybePos.Add(new Pair(3, 10));
-            maybePos.Add(new Pair(4, 10));
-            maybePos.Add(new Pair(5, 10));
-            maybePos.Add(new Pair(6, 10));
-            maybePos.Add(new Pair(7, 10));
-            maybePos.Add(new Pair(8, 10));
-            maybePos.Add(new Pair(9, 2));
-            maybePos.Add(new Pair(9, 8));
-            maybePos.Add(new Pair(10, 1));
+        int[][] maybePos = { {0, 10}, {1, 8}, {1, 3}, {2, 1}, {3, 1}, {4, 1},
+                             {5, 1}, {6, 1}, {7, 1}, {3, 10}, {4, 10}, {5, 10},
+                             {6, 10}, {7, 10}, {8, 10}, {9, 2}, {9, 8}, {10, 1}
+                           }; 
+        
 
-            Random rand = new Random()
-            int selectRandom = rand.nextInt(maybePos.size());
+        Random rand = new Random();
+        int noOfPairs = 18;
 
-            Pair<> p = maybePos.get(selectRandom);
-            return new Hex(p.getKey(), p.getValue(), null, 0);
-
-        }
+        int p = maybePos.get(selectRandom);
+        return new Hex(maybePos[p][0], maybePos[p][1], null, 0);
     }
 
     public static ArrayList<Hex> getPossibleMoves(Hex[][] board) {
@@ -622,5 +602,4 @@ class Agent41{
     }
 
 }
-
 
