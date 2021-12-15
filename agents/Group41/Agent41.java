@@ -431,7 +431,7 @@ class Agent41{
         Random rand = new Random();
         int noOfPairs = 18;
 
-        int p = maybePos.get(selectRandom);
+        int p = rand.nextInt(noOfPairs);
         return new Hex(maybePos[p][0], maybePos[p][1], null, 0);
     }
 
