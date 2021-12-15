@@ -1,6 +1,6 @@
-package agents.group41;
+package group41;
 
-import agents.group41.Hex;
+import group41.Hex;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Queue;

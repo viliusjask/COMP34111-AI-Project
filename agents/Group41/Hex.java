@@ -1,4 +1,4 @@
-package agents.group41;
+package group41;
 
 public class Hex {
     int x;
