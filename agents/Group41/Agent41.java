@@ -196,7 +196,7 @@ class Agent41{
         else {
             // Get the best move
             bestMove = new Hex(-1, -1, colour, 0);
-            bestMove = minimax(board, colour, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, bestMove);
+            bestMove = minimax(board, colour, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, bestMove);
         }
 
         if (bestMove != null){
@@ -342,7 +342,9 @@ class Agent41{
             return -1000;
         
         int bridgeHeur = bridgeFactor(board, player);
-        int dijkstraHuer = dijkstra(board, player) - dijkstra(board, opponent);
+        //int dijkstraHuerPlayer = dijkstra(board, player);
+        int dijkstraHuer = dijkstra(board, player);
+        
 
         int playerScore = connectedNodes(board, player);
 
@@ -381,6 +383,7 @@ class Agent41{
 
     public static int dijkstra(Hex[][] board, String player)
     {
+    	System.out.println("DIJKSTRA");
         for (int i = 0; i < boardSize; i++) {
         	for (int j = 0; j < boardSize; j++) {
         		visited[i][j] = false;
@@ -416,24 +419,28 @@ class Agent41{
     	
     	for (int i = 0; i < boardSize; i++) {
     		for (int j = 0; j < boardSize; j++) {
-    			board[i][j].setPathLengthFromSource(Integer.MAX_VALUE);
+    			board[i][j].setPathLengthFromSource(10000);
     		}
     	}
     	
     	ArrayList<Hex> verticesQueue = new ArrayList<Hex>();
 
     	if (player.equals("R")) {
+    		System.out.println("1111111111111111111111");
     		for (int i = 0; i < boardSize; i++) {
     			if ("R".equals(board[0][i].getPlayer()) || board[0][i].getPlayer() == null) {
     				verticesQueue.add(board[0][i]);
+    				board[0][i].setPathLengthFromSource(1);
         			visited[0][i] = true;
     			}
     		}
-    	}3
+    	}
     	else if (player.equals("B")) {
+    		System.out.println("222222222222222222222");
     		for (int i = 0; i < boardSize; i++) {
     			if ("B".equals(board[i][0].getPlayer()) || board[i][0].getPlayer() == null) {
         			verticesQueue.add(board[i][0]);
+        			board[i][0].setPathLengthFromSource(1);
         			visited[i][0] = true;
     			}
     		}
@@ -443,7 +450,7 @@ class Agent41{
     	
     	while (verticesQueue.size() != 0) {
             Hex currentVertex = verticesQueue.get(0);
-            verticesQueue.remove(0)
+            verticesQueue.remove(0);
 
     		ArrayList<Hex> neighbours = getNeighbours(board, currentVertex);
     		for (int i = 0; i < neighbours.size(); i++) {
@@ -451,8 +458,9 @@ class Agent41{
                 int neighDist = currentVertex.getPathLengthFromSource();
                 if(currentNeighbour.getPlayer() != player)
                     neighDist++;
-    			
     			if (neighDist < currentNeighbour.getPathLengthFromSource()) {
+    				System.out.println(neighDist);
+    				System.out.println(currentNeighbour.getPathLengthFromSource());
     				currentNeighbour.setPathLengthFromSource(neighDist);
     				board[currentNeighbour.getX()][currentNeighbour.getY()].setPathLengthFromSource(neighDist);
     			}
@@ -482,6 +490,7 @@ class Agent41{
     			minPath = Collections.min(blueList);
     		}
     	}
+    	System.out.println(minPath);
     	return minPath;
     }
 
