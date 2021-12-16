@@ -173,16 +173,12 @@ class Agent41{
             Hex bestMove;
             bestMove = selectStartingPosition();
         	String msg = "" + bestMove.getX() + "," + bestMove.getY() + "\n";
-        	System.out.println("Message first move x y");
             sendMessage(msg);
-            System.out.println("Return 1");
             return;
         }
         if (turn == 2){
             if(shouldSwap(getFirstMove(board))){
-                System.out.println("Message swap");
                 sendMessage("SWAP\n");
-                System.out.println("Return 2");
                 return;
             }
         }
@@ -196,17 +192,16 @@ class Agent41{
         }
         else {
             // Get the best move
-            Hex bestMove = new Hex(-1, -1, colour, 0)
-            bestMove = minimax(board, colour, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, bestMove);
+            bestMove = new Hex(-1, -1, colour, 0);
+            bestMove = minimax(board, colour, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, bestMove);
         }
 
         if (bestMove != null){
             String msg = "" + bestMove.getX() + "," + bestMove.getY() + "\n";
-            System.out.println(bestMove.getX());
             sendMessage(msg);
             return;
         }
-        System.out.println("timing out");
+        
         return;
     }
 
@@ -259,33 +254,44 @@ class Agent41{
 
     public static Hex minimax(Hex[][] board, String player, int depth, int alpha, int beta, Hex bestMove) {
         ArrayList<Hex> possibleMoves;
+
         possibleMoves = getPossibleMoves(board);
+        System.out.println("NOOOOOOOOOOOOOO");
+        System.out.println(possibleMoves.size());
         if(depth == 0 || possibleMoves.size() == 0)
         {
-            // int bestScore = getBoardState(board, player);
-            // bestMove.setHeurValue(bestScore);
+            int bestScore = getBoardState(board, player);
+            bestMove.setHeurValue(bestScore);
+        	System.out.print(bestMove.getX());
+        	System.out.print(bestMove.getY());
+        	System.out.println();
             return bestMove;
         }
 
         int bestEval;
-        if(player == "R") // max player
+        if(player.equals("R")) // max player
         {
+        	System.out.println("NOOOOOOOOOOOOOO");
             bestEval = Integer.MIN_VALUE;
             for(int i = 0; i < possibleMoves.size(); i++)
             {
                 int currentX = possibleMoves.get(i).getX();
                 int currentY = possibleMoves.get(i).getY();
-                Hex currentMove = board[currentX][currentY];
-
                 board[currentX][currentY].setPlayer("R");
+                Hex currentMove = board[currentX][currentY];
 
                 Hex eval = minimax(board, "B", depth - 1, alpha, beta, bestMove);
                 int evalVal = eval.getHeurValue();
+                System.out.println(evalVal);
                 if(bestEval < evalVal)
                 {
+                	System.out.println("YOOOOOOOOOOOOOOOOO");
                     bestEval = evalVal;
+                   // bestMove = currentMove;
+                    bestMove.setX(currentX);
+                    bestMove.setY(currentY);
+                    
                     bestMove.setHeurValue(bestEval);
-                    bestMove = currentMove;
                     alpha = Math.max(alpha, evalVal);
                     if(beta <= alpha)
                     {
@@ -298,24 +304,28 @@ class Agent41{
                 
             }
         } 
-        else if(player == "B") // min player
+        else if(player.equals("B")) // min player
         {
+        	System.out.println("NOOOOOOOOOOOOOO");
             bestEval = Integer.MAX_VALUE;
             for(int i = 0; i < possibleMoves.size(); i++)
                 {
                     int currentX = possibleMoves.get(i).getX();
                     int currentY = possibleMoves.get(i).getY();
-                    Hex currentMove = board[currentX][currentY];
-
                     board[currentX][currentY].setPlayer("B");
-
+                    Hex currentMove = board[currentX][currentY];
+                    
                     Hex eval = minimax(board, "R", depth - 1, alpha, beta, bestMove);
                     int evalVal = eval.getHeurValue();
+                    System.out.println(evalVal);
                     if(bestEval > evalVal)
                     {
+                    	System.out.println("YOOOOOOOOOOOOOOOOO");
                         bestEval = evalVal;
+                        //bestMove = currentMove;
+                        bestMove.setX(currentX);
+                        bestMove.setY(currentY);
                         bestMove.setHeurValue(bestEval);
-                        bestMove = currentMove;
                         alpha = Math.min(alpha, evalVal);
                         if(beta <= alpha)
                         {
@@ -363,10 +373,10 @@ class Agent41{
                     ArrayList<Hex> bridges = getPossibleBridges(board, board[i][j]);
                     for (Hex h : bridges) {
                         // Bridge exists for maximising player
-                        if (player == "R" && h.getPlayer() == "R") {
+                        if (player.equals("R") && h.getPlayer().equals("R")) {
                             score += 5;
                         // Bridge exists for minimizing player
-                        } else if (player == "B" && h.getPlayer() == "B") {
+                        } else if (player.equals("B") && h.getPlayer().equals("B")) {
                             score += -5;
                         }
                     }
@@ -422,17 +432,17 @@ class Agent41{
     	
     	Queue<Hex> verticesQueue = new PriorityQueue<Hex>();
     	
-    	if (player == "R") {
+    	if (player.equals("R")) {
     		for (int i = 0; i < boardSize; i++) {
-    			if (board[0][i].getPlayer() == "R" || board[0][i].getPlayer() == null) {
+    			if (board[0][i].getPlayer().equals("R") || board[0][i].getPlayer() == null) {
     				verticesQueue.add(board[0][i]);
         			visited[0][i] = true;
     			}
     		}
     	}
-    	else if (player == "B") {
+    	else if (player.equals("B")) {
     		for (int i = 0; i < boardSize; i++) {
-    			if (board[i][0].getPlayer() == "B" || board[i][0].getPlayer() == null) {
+    			if (board[i][0].getPlayer().equals("B") || board[i][0].getPlayer() == null) {
         			verticesQueue.add(board[i][0]);
         			visited[i][0] = true;
     			}
@@ -471,11 +481,11 @@ class Agent41{
     	int minPath = Integer.MAX_VALUE;
     	
     	for (int i = 0; i < boardSize; i++) {
-    		if (player == "R") {
+    		if (player.equals("R")) {
     			redList.add(board[boardSize-1][i].getPathLengthFromSource());
     			minPath = Collections.min(redList);
     		}
-    		else if (player == "B") {
+    		else if (player.equals("B")) {
     			blueList.add(board[i][boardSize-1].getPathLengthFromSource());
     			minPath = Collections.min(blueList);
     		}
@@ -570,7 +580,7 @@ class Agent41{
     	for (int i = 0; i < boardSize; i++)
             for (int j = 0; j < boardSize; j++)
     		    if(board[i][j].getPlayer() == null) 
-    			    moves.add(new Hex(i, j, null, board[i][j].getHeurValue()));
+    			    moves.add(board[i][j]);
 
         Collections.shuffle(moves); // shuffling the positions
         return moves;
@@ -689,7 +699,7 @@ class Agent41{
         }
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                if (board[i][j].getPlayer() == "B" && !visited[i][j]) {
+                if (board[i][j].getPlayer().equals("B") && !visited[i][j]) {
                     DFS(board, i, j, visited, "B");
                 }
             }
@@ -712,9 +722,9 @@ class Agent41{
         		visited[i][j]=false;
         	}
         }
-        for (int i = 0; i < boardSize; ++i) {
-            for (int j = 0; j < 1; ++j) {
-                if (board[i][j].getPlayer() == "R" && !visited[i][j]) {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                if (board[i][j].getPlayer().equals("R") && !visited[i][j]) {
                     DFS(board, i, j, visited, "R");
                 }
             }
