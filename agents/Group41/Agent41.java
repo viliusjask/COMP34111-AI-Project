@@ -1,4 +1,3 @@
-import agents.group41.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.Queue;
@@ -8,6 +7,66 @@ import java.util.PriorityQueue;
 import java.io.*;
 
 class Agent41{
+	static class Hex {
+	    int x;
+	    int y;
+	    String player;
+	    int heurValue;
+	    int pathLengthFromSource;
+
+	    public Hex() {
+	    }
+
+	    public Hex(int x, int y, String player, int heurValue) {
+	        this.x = x;
+	        this.y = y;
+	        this.player = player;
+	        this.heurValue = heurValue;
+	    }
+	    
+	    public int getPathLengthFromSource() {
+	        return this.pathLengthFromSource;
+	    }
+	    
+	    public void setPathLengthFromSource(int pathLengthFromSource) {
+	    	this.pathLengthFromSource = pathLengthFromSource;
+	    }
+	    
+	    public int getX() {
+	        return this.x;
+	    }
+
+	    public void setX(int x) {
+	        this.x = x;
+	    }
+
+	    public int getY() {
+	        return this.y;
+	    }
+
+	    public void setY(int y) {
+	        this.y = y;
+	    }
+
+	    public String getPlayer() {
+	        return this.player;
+	    }
+
+	    public void setPlayer(String player) {
+	        this.player = player;
+	    }
+
+	    public int getHeurValue() {
+	        return this.heurValue;
+	    }
+
+	    public void setHeurValue(int heurValue) {
+	        this.heurValue = heurValue;
+	    }
+
+
+	}
+
     public static String HOST = "127.0.0.1";
     public static int PORT = 1234;
 
@@ -110,6 +169,13 @@ class Agent41{
     private void makeMove(String board_str){
         Hex[][] board = boardStringToArray(board_str);
         // Swap Logic
+        if (turn == 1) {
+            Hex bestMove;
+            bestMove = selectStartingPosition();
+        	String msg = "" + bestMove.getX() + "," + bestMove.getY() + "\n";
+            sendMessage(msg);
+            return;
+        }
         if (turn == 2){
             if(shouldSwap(getFirstMove(board))){
                 sendMessage("SWAP\n");
@@ -178,6 +244,8 @@ class Agent41{
             for (int j = 0; j < boardSize; j++)
                 hexBoard[i][j] = null;
         // Pass hexBoard in run?
+        agent.run();
+        System.out.println("YOI");
     }
 
     public static Hex minimax(Hex[][] board, String player, int depth, int alpha, int beta) {

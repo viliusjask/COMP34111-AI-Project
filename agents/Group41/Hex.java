@@ -1,4 +1,4 @@
-package group41;
+package agents.Group41;
 
 public class Hex {
     int x;
