@@ -333,24 +333,25 @@ class Agent41{
 
     public static int getBoardState(Hex[][] board, String player)
     {
-        String opponent = selectOpponent(player);
+    	String opponent = selectOpponent(player);
+//        if(checkWinForRedPlayer(board)) {
+//        	System.out.println("RedWin1");
+//            return 100000;
+//        }
 
-        if(checkWinForRedPlayer(board))
-            return 1000;
-
-        if(checkWinForBluePlayer(board))
-            return -1000;
-        
+//        if(checkWinForBluePlayer(board)) {
+//        	System.out.println("Bluewin");
+//            return -100000;
+//        }
         int bridgeHeur = bridgeFactor(board, player);
-        //int dijkstraHuerPlayer = dijkstra(board, player);
-        int dijkstraHuer = dijkstra(board, player);
-        
+        int dijkstraHuerPlayer = dijkstra(board, player);
+        //int dijkstraHuer = dijkstra(board, player);
+        System.out.println(dijkstraHuerPlayer);
 
         int playerScore = connectedNodes(board, player);
-
         int opponentScore = connectedNodes(board, player);
-
-        return 6 * bridgeHeur + dijkstraHuer + (playerScore - opponentScore);
+        return 6 * bridgeHeur + (playerScore - opponentScore);
+        //return dijkstraHuer;
     }
 
     // bridge heuristics
@@ -429,8 +430,8 @@ class Agent41{
     		System.out.println("1111111111111111111111");
     		for (int i = 0; i < boardSize; i++) {
     			if ("R".equals(board[0][i].getPlayer()) || board[0][i].getPlayer() == null) {
-    				verticesQueue.add(board[0][i]);
     				board[0][i].setPathLengthFromSource(1);
+    				verticesQueue.add(board[0][i]);
         			visited[0][i] = true;
     			}
     		}
@@ -439,8 +440,8 @@ class Agent41{
     		System.out.println("222222222222222222222");
     		for (int i = 0; i < boardSize; i++) {
     			if ("B".equals(board[i][0].getPlayer()) || board[i][0].getPlayer() == null) {
+    				board[i][0].setPathLengthFromSource(1);
         			verticesQueue.add(board[i][0]);
-        			board[i][0].setPathLengthFromSource(1);
         			visited[i][0] = true;
     			}
     		}
@@ -456,11 +457,11 @@ class Agent41{
     		for (int i = 0; i < neighbours.size(); i++) {
     			Hex currentNeighbour = neighbours.get(i);
                 int neighDist = currentVertex.getPathLengthFromSource();
-                if(currentNeighbour.getPlayer() != player)
+                if(currentNeighbour.getPlayer() == null)
                     neighDist++;
     			if (neighDist < currentNeighbour.getPathLengthFromSource()) {
-    				System.out.println(neighDist);
-    				System.out.println(currentNeighbour.getPathLengthFromSource());
+    				//System.out.println(neighDist);
+    				//System.out.println(currentNeighbour.getPathLengthFromSource());
     				currentNeighbour.setPathLengthFromSource(neighDist);
     				board[currentNeighbour.getX()][currentNeighbour.getY()].setPathLengthFromSource(neighDist);
     			}
@@ -469,7 +470,7 @@ class Agent41{
     		    //int pathLengthFromSource;
     		    //ArrayList<Hex> pathVerticesFromSource;
     			
-    			if (!visited[currentNeighbour.getX()][currentNeighbour.getY()] || currentNeighbour.getPlayer() == player) {
+    			if (!visited[currentNeighbour.getX()][currentNeighbour.getY()]) {
     				verticesQueue.add(currentNeighbour);
     				visited[currentNeighbour.getX()][currentNeighbour.getY()] = true;
     			}
@@ -490,7 +491,7 @@ class Agent41{
     			minPath = Collections.min(blueList);
     		}
     	}
-    	System.out.println(minPath);
+    	//System.out.println(minPath);
     	return minPath;
     }
 
@@ -597,7 +598,7 @@ class Agent41{
     	{
     		if( posX + rowNo[i] >= 0 && posX + rowNo[i] < boardSize &&
                 posY + colNo[i] >= 0 && posY + colNo[i] < boardSize &&
-                (board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == null || board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == position.getPlayer()))
+                (board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == null || (position.getPlayer() != null && position.getPlayer().equals(board[posX + rowNo[i]][posY + colNo[i]].getPlayer()))))
     		{
     			moves.add(new Hex(posX + rowNo[i], posY + colNo[i], position.getPlayer(), position.getHeurValue()));
     		}
