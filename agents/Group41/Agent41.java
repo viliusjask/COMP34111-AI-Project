@@ -170,14 +170,16 @@ class Agent41{
         Hex[][] board = boardStringToArray(board_str);
         // Swap Logic
         if (turn == 1) {
+        	System.out.println("GOPISDJGRIOUPSJGMHRIOUPSGMNHSRIUOGHUMNSIOPGHUBs");
             Hex bestMove;
             bestMove = selectStartingPosition();
+            board[bestMove.getX()][bestMove.getY()].setPlayer(colour);
         	String msg = "" + bestMove.getX() + "," + bestMove.getY() + "\n";
             sendMessage(msg);
             return;
         }
         if (turn == 2){
-            if(shouldSwap(getFirstMove(board))){
+            if(shouldSwap(getOpponentFirstMove(board))){
                 sendMessage("SWAP\n");
                 return;
             }
@@ -206,7 +208,7 @@ class Agent41{
     }
 
     // Should only be called on turn if minimizing player for swap rule
-    public static Hex getFirstMove(Hex[][] board){
+    public static Hex getOpponentFirstMove(Hex[][] board){
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 if (board[i][j].getPlayer() != null){
@@ -351,13 +353,13 @@ class Agent41{
             return -1000;
         
         int bridgeHeur = bridgeFactor(board, player);
-        int dijkstraHuer = dijkstra(board, player) - dijkstra(board, selectOpponent(player));
+        //int dijkstraHuer = dijkstra(board, player) - dijkstra(board, selectOpponent(player));
 
         int playerScore = connectedNodes(board, player);
 
         int opponentScore = connectedNodes(board, player);
 
-        return 6 * bridgeHeur + dijkstraHuer + (playerScore - opponentScore);
+        return 6 * bridgeHeur + (playerScore - opponentScore);
     }
 
     // bridge heuristics
