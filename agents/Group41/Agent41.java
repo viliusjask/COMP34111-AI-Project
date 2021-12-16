@@ -173,12 +173,16 @@ class Agent41{
             Hex bestMove;
             bestMove = selectStartingPosition();
         	String msg = "" + bestMove.getX() + "," + bestMove.getY() + "\n";
+        	System.out.println("Message first move x y");
             sendMessage(msg);
+            System.out.println("Return 1");
             return;
         }
         if (turn == 2){
             if(shouldSwap(getFirstMove(board))){
+                System.out.println("Message swap");
                 sendMessage("SWAP\n");
+                System.out.println("Return 2");
                 return;
             }
         }
@@ -197,8 +201,12 @@ class Agent41{
 
         if (bestMove != null){
             String msg = "" + bestMove.getX() + "," + bestMove.getY() + "\n";
+            System.out.println(bestMove.getX());
             sendMessage(msg);
+            return;
         }
+        System.out.println("timing out");
+        return;
     }
 
     // Should only be called on turn if minimizing player for swap rule
