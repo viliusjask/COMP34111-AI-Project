@@ -170,7 +170,6 @@ class Agent41{
         Hex[][] board = boardStringToArray(board_str);
         // Swap Logic
         if (turn == 1) {
-        	System.out.println("GOPISDJGRIOUPSJGMHRIOUPSGMNHSRIUOGHUMNSIOPGHUBs");
             Hex bestMove;
             bestMove = selectStartingPosition();
             board[bestMove.getX()][bestMove.getY()].setPlayer(colour);
@@ -195,7 +194,7 @@ class Agent41{
         else {
             // Get the best move
             bestMove = new Hex(-1, -1, colour, 0);
-            bestMove = minimax(board, colour, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, bestMove);
+            bestMove = minimax(board, colour, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, bestMove);
         }
 
         if (bestMove != null){
@@ -223,10 +222,10 @@ class Agent41{
     public static Hex[][] boardStringToArray(String board){
         String[] lines = board.split(",");
         Hex[][] hexBoard = new Hex[boardSize][boardSize];
-        for (int j = 0; j < boardSize; j++){
-            for (int i = 0; i < lines[j].length(); i++){ 
+        for (int i = 0; i < boardSize; i++){
+            for (int j = 0; j < boardSize; j++){ 
                 Hex h = new Hex(i, j, null, -1);
-                switch (lines[j].charAt(i)){
+                switch (lines[i].charAt(j)){
                     case '0':
                         hexBoard[i][j] = h;
                         break;
@@ -251,29 +250,22 @@ class Agent41{
                 hexBoard[i][j] = null;
         // Pass hexBoard in run?
         agent.run();
-        System.out.println("YOI");
     }
 
     public static Hex minimax(Hex[][] board, String player, int depth, int alpha, int beta, Hex bestMove) {
         ArrayList<Hex> possibleMoves;
 
         possibleMoves = getPossibleMoves(board);
-        System.out.println("NOOOOOOOOOOOOOO");
-        System.out.println(possibleMoves.size());
         if(depth == 0 || possibleMoves.size() == 0)
         {
             int bestScore = getBoardState(board, player);
             bestMove.setHeurValue(bestScore);
-        	System.out.print(bestMove.getX());
-        	System.out.print(bestMove.getY());
-        	System.out.println();
             return bestMove;
         }
 
         int bestEval;
         if(player.equals("R")) // max player
         {
-        	System.out.println("NOOOOOOOOOOOOOO");
             bestEval = Integer.MIN_VALUE;
             for(int i = 0; i < possibleMoves.size(); i++)
             {
@@ -284,10 +276,8 @@ class Agent41{
 
                 Hex eval = minimax(board, "B", depth - 1, alpha, beta, bestMove);
                 int evalVal = eval.getHeurValue();
-                System.out.println(evalVal);
                 if(bestEval < evalVal)
                 {
-                	System.out.println("YOOOOOOOOOOOOOOOOO");
                     bestEval = evalVal;
                    // bestMove = currentMove;
                     bestMove.setX(currentX);
@@ -308,7 +298,6 @@ class Agent41{
         } 
         else if(player.equals("B")) // min player
         {
-        	System.out.println("NOOOOOOOOOOOOOO");
             bestEval = Integer.MAX_VALUE;
             for(int i = 0; i < possibleMoves.size(); i++)
                 {
@@ -319,10 +308,8 @@ class Agent41{
                     
                     Hex eval = minimax(board, "R", depth - 1, alpha, beta, bestMove);
                     int evalVal = eval.getHeurValue();
-                    System.out.println(evalVal);
                     if(bestEval > evalVal)
                     {
-                    	System.out.println("YOOOOOOOOOOOOOOOOO");
                         bestEval = evalVal;
                         //bestMove = currentMove;
                         bestMove.setX(currentX);
@@ -353,13 +340,13 @@ class Agent41{
             return -1000;
         
         int bridgeHeur = bridgeFactor(board, player);
-        //int dijkstraHuer = dijkstra(board, player) - dijkstra(board, selectOpponent(player));
+        int dijkstraHuer = dijkstra(board, player) - dijkstra(board, opponent);
 
         int playerScore = connectedNodes(board, player);
 
         int opponentScore = connectedNodes(board, player);
 
-        return 6 * bridgeHeur + (playerScore - opponentScore);
+        return 6 * bridgeHeur + dijkstraHuer + (playerScore - opponentScore);
     }
 
     // bridge heuristics
