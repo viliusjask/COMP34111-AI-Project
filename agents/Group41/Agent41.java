@@ -420,7 +420,7 @@ class Agent41{
     	
     	for (int i = 0; i < boardSize; i++) {
     		for (int j = 0; j < boardSize; j++) {
-    			board[i][j].setPathLengthFromSource(10000);
+    			board[i][j].setPathLengthFromSource(0);
     		}
     	}
     	
@@ -430,7 +430,8 @@ class Agent41{
     		System.out.println("1111111111111111111111");
     		for (int i = 0; i < boardSize; i++) {
     			if ("R".equals(board[0][i].getPlayer()) || board[0][i].getPlayer() == null) {
-    				board[0][i].setPathLengthFromSource(1);
+    				if ("B".equals(board[0][i].getPlayer())) board[0][i].setPathLengthFromSource(0);
+    				else board[0][i].setPathLengthFromSource(1);
     				verticesQueue.add(board[0][i]);
         			visited[0][i] = true;
     			}
@@ -440,7 +441,8 @@ class Agent41{
     		System.out.println("222222222222222222222");
     		for (int i = 0; i < boardSize; i++) {
     			if ("B".equals(board[i][0].getPlayer()) || board[i][0].getPlayer() == null) {
-    				board[i][0].setPathLengthFromSource(1);
+    				if ("B".equals(board[i][0].getPlayer())) board[i][0].setPathLengthFromSource(0);
+    				else board[i][0].setPathLengthFromSource(1);
         			verticesQueue.add(board[i][0]);
         			visited[i][0] = true;
     			}
@@ -460,8 +462,8 @@ class Agent41{
                 if(currentNeighbour.getPlayer() == null)
                     neighDist++;
     			if (neighDist < currentNeighbour.getPathLengthFromSource()) {
-    				//System.out.println(neighDist);
-    				//System.out.println(currentNeighbour.getPathLengthFromSource());
+    				System.out.println("gvwegweghwgwe");
+    				System.out.println(currentNeighbour.getPathLengthFromSource());
     				currentNeighbour.setPathLengthFromSource(neighDist);
     				board[currentNeighbour.getX()][currentNeighbour.getY()].setPathLengthFromSource(neighDist);
     			}
@@ -481,17 +483,21 @@ class Agent41{
     	ArrayList<Integer> blueList = new ArrayList<Integer>();
     	int minPath = Integer.MAX_VALUE;
     	
-    	for (int i = 0; i < boardSize; i++) {
-    		if (player.equals("R")) {
-    			redList.add(board[boardSize-1][i].getPathLengthFromSource());
-    			minPath = Collections.min(redList);
-    		}
-    		else if (player.equals("B")) {
-    			blueList.add(board[i][boardSize-1].getPathLengthFromSource());
-    			minPath = Collections.min(blueList);
-    		}
-    	}
-    	//System.out.println(minPath);
+		if (player.equals("R")) {
+			for (int i = 0; i < boardSize; i++) {
+				redList.add(board[boardSize-1][i].getPathLengthFromSource());
+			}
+			minPath = Collections.min(redList);
+			System.out.println(redList);
+		}
+		else if (player.equals("B")) {
+			for (int i = 0; i < boardSize; i++) {
+				blueList.add(board[i][boardSize-1].getPathLengthFromSource());
+			}
+			minPath = Collections.min(blueList);
+			System.out.println(blueList);
+		}
+			//System.out.println(minPath);
     	return minPath;
     }
 
