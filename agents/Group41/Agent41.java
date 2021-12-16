@@ -73,11 +73,11 @@ class Agent41{
     private Socket s;
     private PrintWriter out;
     private BufferedReader in;
-    
 
     private static String colour = "R";
     private int turn = 0;
     private static int boardSize = 11;
+    private static boolean visited[][] = new boolean[boardSize][boardSize];
 
     private void Connect() throws UnknownHostException, IOException{
         s = new Socket(HOST, PORT);
@@ -373,10 +373,10 @@ class Agent41{
                     ArrayList<Hex> bridges = getPossibleBridges(board, board[i][j]);
                     for (Hex h : bridges) {
                         // Bridge exists for maximising player
-                        if (player.equals("R") && h.getPlayer().equals("R")) {
+                        if (player.equals("R") && "R".equals(h.getPlayer())) {
                             score += 5;
                         // Bridge exists for minimizing player
-                        } else if (player.equals("B") && h.getPlayer().equals("B")) {
+                        } else if (player.equals("B") && "B".equals(h.getPlayer())) {
                             score += -5;
                         }
                     }
@@ -390,7 +390,6 @@ class Agent41{
 
     public static int dijkstra(Hex[][] board, String player)
     {
-    	boolean visited[][] = new boolean[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {
         	for (int j = 0; j < boardSize; j++) {
         		visited[i][j] = false;
@@ -434,7 +433,7 @@ class Agent41{
     	
     	if (player.equals("R")) {
     		for (int i = 0; i < boardSize; i++) {
-    			if (board[0][i].getPlayer().equals("R") || board[0][i].getPlayer() == null) {
+    			if ("R".equals(board[0][i].getPlayer()) || board[0][i].getPlayer() == null) {
     				verticesQueue.add(board[0][i]);
         			visited[0][i] = true;
     			}
@@ -442,7 +441,7 @@ class Agent41{
     	}
     	else if (player.equals("B")) {
     		for (int i = 0; i < boardSize; i++) {
-    			if (board[i][0].getPlayer().equals("B") || board[i][0].getPlayer() == null) {
+    			if ("B".equals(board[i][0].getPlayer()) || board[i][0].getPlayer() == null) {
         			verticesQueue.add(board[i][0]);
         			visited[i][0] = true;
     			}
@@ -496,7 +495,6 @@ class Agent41{
     // Connected nodes heur
     public static int connectedNodes(Hex[][] board, String player )
     {
-        boolean visited[][] = new boolean[boardSize][boardSize];
         for(int i = 0; i < boardSize; i++)
             for(int j = 0; j < boardSize; j++)
                 visited[i][j] = false;
@@ -691,7 +689,6 @@ class Agent41{
 
     private static boolean checkWinForBluePlayer(Hex[][] board) {
         boolean found = false;
-        boolean visited[][] = new boolean[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {
         	for (int j = 0; j< boardSize; j++) {
         		visited[i][j] = false;
@@ -699,7 +696,7 @@ class Agent41{
         }
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                if (board[i][j].getPlayer().equals("B") && !visited[i][j]) {
+                if ("B".equals(board[i][j].getPlayer()) && !visited[i][j]) {
                     DFS(board, i, j, visited, "B");
                 }
             }
@@ -716,7 +713,6 @@ class Agent41{
 
     private static boolean checkWinForRedPlayer(Hex[][] board) {
         boolean found = false;
-        boolean visited[][] = new boolean[boardSize][boardSize];
         for (int i = 0; i < boardSize; i++) {
         	for (int j = 0; j< boardSize; j++) {
         		visited[i][j]=false;
@@ -724,7 +720,7 @@ class Agent41{
         }
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                if (board[i][j].getPlayer().equals("R") && !visited[i][j]) {
+                if ("R".equals(board[i][j].getPlayer()) && !visited[i][j]) {
                     DFS(board, i, j, visited, "R");
                 }
             }
