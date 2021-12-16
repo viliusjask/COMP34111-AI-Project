@@ -384,7 +384,6 @@ class Agent41{
 
     public static int dijkstra(Hex[][] board, String player)
     {
-    	System.out.println("DIJKSTRA");
         for (int i = 0; i < boardSize; i++) {
         	for (int j = 0; j < boardSize; j++) {
         		visited[i][j] = false;
@@ -420,14 +419,13 @@ class Agent41{
     	
     	for (int i = 0; i < boardSize; i++) {
     		for (int j = 0; j < boardSize; j++) {
-    			board[i][j].setPathLengthFromSource(0);
+    			board[i][j].setPathLengthFromSource(10000);
     		}
     	}
     	
     	ArrayList<Hex> verticesQueue = new ArrayList<Hex>();
 
     	if (player.equals("R")) {
-    		System.out.println("1111111111111111111111");
     		for (int i = 0; i < boardSize; i++) {
     			if ("R".equals(board[0][i].getPlayer()) || board[0][i].getPlayer() == null) {
     				if ("B".equals(board[0][i].getPlayer())) board[0][i].setPathLengthFromSource(0);
@@ -438,7 +436,6 @@ class Agent41{
     		}
     	}
     	else if (player.equals("B")) {
-    		System.out.println("222222222222222222222");
     		for (int i = 0; i < boardSize; i++) {
     			if ("B".equals(board[i][0].getPlayer()) || board[i][0].getPlayer() == null) {
     				if ("B".equals(board[i][0].getPlayer())) board[i][0].setPathLengthFromSource(0);
@@ -462,8 +459,6 @@ class Agent41{
                 if(currentNeighbour.getPlayer() == null)
                     neighDist++;
     			if (neighDist < currentNeighbour.getPathLengthFromSource()) {
-    				System.out.println("gvwegweghwgwe");
-    				System.out.println(currentNeighbour.getPathLengthFromSource());
     				currentNeighbour.setPathLengthFromSource(neighDist);
     				board[currentNeighbour.getX()][currentNeighbour.getY()].setPathLengthFromSource(neighDist);
     			}
@@ -488,16 +483,13 @@ class Agent41{
 				redList.add(board[boardSize-1][i].getPathLengthFromSource());
 			}
 			minPath = Collections.min(redList);
-			System.out.println(redList);
 		}
 		else if (player.equals("B")) {
 			for (int i = 0; i < boardSize; i++) {
 				blueList.add(board[i][boardSize-1].getPathLengthFromSource());
 			}
 			minPath = Collections.min(blueList);
-			System.out.println(blueList);
 		}
-			//System.out.println(minPath);
     	return minPath;
     }
 
@@ -606,7 +598,7 @@ class Agent41{
                 posY + colNo[i] >= 0 && posY + colNo[i] < boardSize &&
                 (board[posX + rowNo[i]][posY + colNo[i]].getPlayer() == null || (position.getPlayer() != null && position.getPlayer().equals(board[posX + rowNo[i]][posY + colNo[i]].getPlayer()))))
     		{
-    			moves.add(new Hex(posX + rowNo[i], posY + colNo[i], position.getPlayer(), position.getHeurValue()));
+    			moves.add(board[posX + rowNo[i]][posY + colNo[i]]);
     		}
     	}
         return moves;
