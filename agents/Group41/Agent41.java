@@ -420,12 +420,19 @@ class Agent41{
     		}
     	}
     	
-    	Queue<Hex> verticesQueue = new PriorityQueue<Hex>();
+    	// Queue<Hex> verticesQueue = new PriorityQueue<Hex>();
+        Queue<Integer> xQueue = new PriorityQueue<Integer>();
+        Queue<Integer> yQueue = new PriorityQueue<Integer>();
+        Queue<String> playerQueue = new PriorityQueue<String>();
     	
     	if (player.equals("R")) {
     		for (int i = 0; i < boardSize; i++) {
     			if ("R".equals(board[0][i].getPlayer()) || board[0][i].getPlayer() == null) {
-    				verticesQueue.add(board[0][i]);
+    				// verticesQueue.add(board[0][i]);
+                    xQueue.add(board[0][i].getX());
+                    yQueue.add(board[0][i].getY());
+                    playerQueue.add(board[0][i].getPlayer());
+
         			visited[0][i] = true;
     			}
     		}
@@ -433,7 +440,9 @@ class Agent41{
     	else if (player.equals("B")) {
     		for (int i = 0; i < boardSize; i++) {
     			if ("B".equals(board[i][0].getPlayer()) || board[i][0].getPlayer() == null) {
-        			verticesQueue.add(board[i][0]);
+                    xQueue.add(board[i][0].getX());
+                    yQueue.add(board[i][0].getY());
+                    playerQueue.add(board[i][0].getPlayer());
         			visited[i][0] = true;
     			}
     		}
@@ -442,8 +451,11 @@ class Agent41{
     	
     	
     	while (verticesQueue.size() != 0) {
-    		Hex currentVertex = verticesQueue.poll();
-    		ArrayList<Hex> neighbours = getNeighbours(board, currentVertex);
+    		// Hex currentVertex = verticesQueue.poll();
+            int x;
+            int y;
+            String player1;
+    		ArrayList<Hex> neighbours = getNeighbours(board, new Hex(x, y, player1, 0));
     		for (int i = 0; i < neighbours.size(); i++) {
     			Hex currentNeighbour = neighbours.get(i);
                 int neighDist = currentVertex.getPathLengthFromSource();
@@ -460,7 +472,9 @@ class Agent41{
     		    //ArrayList<Hex> pathVerticesFromSource;
     			
     			if (!visited[currentNeighbour.getX()][currentNeighbour.getY()] || currentNeighbour.getPlayer() == player) {
-    				verticesQueue.add(currentNeighbour);
+                    xQueue.add(currentNeighbour.getX());
+                    yQueue.add(currentNeighbour.getY());
+                    playerQueue.add(currentNeighbour.getPlayer());
     				visited[currentNeighbour.getX()][currentNeighbour.getY()] = true;
     			}
     		}
