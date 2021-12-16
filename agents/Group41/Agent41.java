@@ -217,7 +217,7 @@ class Agent41{
     public static Hex[][] boardStringToArray(String board){
         String[] lines = board.split(",");
         Hex[][] hexBoard = new Hex[boardSize][boardSize];
-        for (int j = 0; j < board.length(); j++){
+        for (int j = 0; j < boardSize; j++){
             for (int i = 0; i < lines[j].length(); i++){ 
                 Hex h = new Hex(i, j, null, -1);
                 switch (lines[j].charAt(i)){
