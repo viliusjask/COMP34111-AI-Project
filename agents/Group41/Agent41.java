@@ -196,7 +196,8 @@ class Agent41{
         }
         else {
             // Get the best move
-            bestMove = minimax(board, colour, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            Hex bestMove = new Hex(-1, -1, colour, 0)
+            bestMove = minimax(board, colour, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, bestMove);
         }
 
         if (bestMove != null){
@@ -256,15 +257,13 @@ class Agent41{
         System.out.println("YOI");
     }
 
-    public static Hex minimax(Hex[][] board, String player, int depth, int alpha, int beta) {
-        Hex bestMove = new Hex(-1, -1, colour, -1);
-
+    public static Hex minimax(Hex[][] board, String player, int depth, int alpha, int beta, Hex bestMove) {
         ArrayList<Hex> possibleMoves;
         possibleMoves = getPossibleMoves(board);
         if(depth == 0 || possibleMoves.size() == 0)
         {
-            int bestScore = getBoardState(board, player);
-            bestMove.setHeurValue(bestScore);
+            // int bestScore = getBoardState(board, player);
+            // bestMove.setHeurValue(bestScore);
             return bestMove;
         }
 
@@ -280,7 +279,7 @@ class Agent41{
 
                 board[currentX][currentY].setPlayer("R");
 
-                Hex eval = minimax(board, "B", depth - 1, alpha, beta);
+                Hex eval = minimax(board, "B", depth - 1, alpha, beta, bestMove);
                 int evalVal = eval.getHeurValue();
                 if(bestEval < evalVal)
                 {
@@ -309,8 +308,8 @@ class Agent41{
                     Hex currentMove = board[currentX][currentY];
 
                     board[currentX][currentY].setPlayer("B");
-             
-                    Hex eval = minimax(board, "R", depth - 1, alpha, beta);
+
+                    Hex eval = minimax(board, "R", depth - 1, alpha, beta, bestMove);
                     int evalVal = eval.getHeurValue();
                     if(bestEval > evalVal)
                     {
