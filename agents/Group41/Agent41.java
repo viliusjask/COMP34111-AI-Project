@@ -196,7 +196,7 @@ class Agent41{
         else {
             // Get the best move
             bestMove = new Hex(-1, -1, colour, 0);
-            bestMove = minimax(board, colour, 1, Integer.MIN_VALUE, Integer.MAX_VALUE, bestMove);
+            bestMove = minimax(board, colour, 3, Integer.MIN_VALUE, Integer.MAX_VALUE, bestMove);
         }
 
         if (bestMove != null){
@@ -334,25 +334,41 @@ class Agent41{
     public static int getBoardState(Hex[][] board, String player)
     {
     	String opponent = selectOpponent(player);
+    	int dijkstraHeurOpponent, dijkstraHeurPlayer, playerScore, opponentScore;
+    	int var = 1;
+
+        
+        int bridgeHeur = bridgeFactor(board, player);
+//        int dijkstraHeurPlayer = (-1) * dijkstra(board, player);
+//        int dijkstraHeurOpponent = dijkstra(board, opponent);
+        //int dijkstraHuer = dijkstra(board, player);
+        
+        if ("R".equals(player)) {
+        	dijkstraHeurPlayer = (-1) * dijkstra(board, player);
+        	dijkstraHeurOpponent = (-1) * dijkstra(board, opponent);
+        	playerScore = connectedNodes(board, player);
+        	opponentScore = connectedNodes(board, player);
+        }
+        else {
+        	dijkstraHeurPlayer = dijkstra(board, player);
+        	dijkstraHeurOpponent = dijkstra(board, opponent);
+        	playerScore = (-1) * connectedNodes(board, player);
+        	opponentScore = (-1) * connectedNodes(board, player);
+        	var = -1;
+        	//int dijkstraHeurOpponent = dijkstra(board, opponent);
+        }
+        
 //        if(checkWinForRedPlayer(board)) {
 //        	System.out.println("RedWin1");
-//            return 100000;
+//            return var*1000000;
 //        }
-
+//
 //        if(checkWinForBluePlayer(board)) {
 //        	System.out.println("Bluewin");
-//            return -100000;
+//            return var*-1000000;
 //        }
-        int bridgeHeur = bridgeFactor(board, player);
-        int dijkstraHuerPlayer = dijkstra(board, player);
-        //int dijkstraHuer = dijkstra(board, player);
-        System.out.println(dijkstraHuerPlayer);
-
-        int playerScore = connectedNodes(board, player);
-        //System.out.println(playerScore);
-        
-        int opponentScore = connectedNodes(board, player);
-        return 6 * bridgeHeur + 100*(playerScore);
+//        		(0-6000)                    (0-1650)                                                            (-5 to 5)
+        return (int) Math.round(60*bridgeHeur + 100*((1.2)*dijkstraHeurPlayer - dijkstraHeurOpponent) + 20*(playerScore - opponentScore));
         //return dijkstraHuer;
     }
 
@@ -370,10 +386,10 @@ class Agent41{
                     for (Hex h : bridges) {
                         // Bridge exists for maximising player
                         if (player.equals("R") && "R".equals(h.getPlayer())) {
-                            score += 5;
+                            score += 1;
                         // Bridge exists for minimizing player
                         } else if (player.equals("B") && "B".equals(h.getPlayer())) {
-                            score += -5;
+                            score += -1;
                         }
                     }
                 }
@@ -458,11 +474,12 @@ class Agent41{
     		for (int i = 0; i < neighbours.size(); i++) {
     			Hex currentNeighbour = neighbours.get(i);
                 int neighDist = currentVertex.getPathLengthFromSource();
+                
                 if(currentNeighbour.getPlayer() == null)
                     neighDist++;
     			if (neighDist < currentNeighbour.getPathLengthFromSource()) {
-    				currentNeighbour.setPathLengthFromSource(neighDist);
     				board[currentNeighbour.getX()][currentNeighbour.getY()].setPathLengthFromSource(neighDist);
+    				currentNeighbour = board[currentNeighbour.getX()][currentNeighbour.getY()];
     			}
     			
     			
@@ -510,10 +527,8 @@ class Agent41{
                 {
                     length = DFS(board, i, j, visited, player);
                     if (length > 1)
-                        ++count;
-                    else if (length <= 1)
-                        count--;
-                }
+                        count++;
+               }
         return count;
     }
 
@@ -697,19 +712,20 @@ class Agent41{
         	}
         }
         for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                if ("B".equals(board[i][j].getPlayer()) && !visited[i][j]) {
-                    DFS(board, i, j, visited, "B");
-                }
-            }
+        	if ("B".equals(board[i][0].getPlayer()) && !visited[i][0]) {
+        		DFS(board, i, 0, visited, "B");
+        	}
+            
         }
 
         for (int i = 0; i < boardSize; i++) {
-            if (visited[boardSize - 1][i] == true) {
+            if (visited[i][boardSize-1] == true) {
+                System.out.println("FOUND");
                 found = true;
                 break;
             }
         }
+        //System.out.println("NOT FOUND");
         return found;
     }
 
@@ -721,15 +737,13 @@ class Agent41{
         	}
         }
         for (int i = 0; i < boardSize; i++) {
-            for (int j = 0; j < boardSize; j++) {
-                if ("R".equals(board[i][j].getPlayer()) && !visited[i][j]) {
-                    DFS(board, i, j, visited, "R");
-                }
-            }
+        	if ("R".equals(board[0][i].getPlayer()) && !visited[0][i]) {
+        		DFS(board, 0, i, visited, "R");
+        	}
         }
 
         for (int i = 0; i < boardSize; i++) {
-            if (visited[i][boardSize - 1] == true) {
+            if (visited[boardSize - 1][i] == true) {
                 found = true;
                 break;
             }
