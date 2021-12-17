@@ -187,17 +187,16 @@ class Agent41{
         }
         // Check if any bridges are at risk
 
-        ArrayList<Hex> bridge_moves = getBridgesAtRisk(board, colour);
+//      ArrayList<Hex> bridge_moves = getBridgesAtRisk(board, colour);
         Hex bestMove;
-        if (bridge_moves.size() > 0){
-            // Prioritize connecting a bridge
-            bestMove = bridge_moves.get(0);
-        }
-        else {
-            // Get the best move
-            bestMove = new Hex(-1, -1, colour, 0);
-            bestMove = minimax(board, colour, 3, Integer.MIN_VALUE, Integer.MAX_VALUE, bestMove);
-        }
+//        if (bridge_moves.size() > 0){
+//            // Prioritize connecting a bridge
+//            bestMove = bridge_moves.get(0);
+//        }
+        // Get the best move
+        bestMove = new Hex(-1, -1, colour, 0);
+        bestMove = minimax(board, colour, 2, Integer.MIN_VALUE, Integer.MAX_VALUE, bestMove);
+        
 
         if (bestMove != null){
             String msg = "" + bestMove.getX() + "," + bestMove.getY() + "\n";
@@ -335,7 +334,6 @@ class Agent41{
     {
     	String opponent = selectOpponent(player);
     	int dijkstraHeurOpponent, dijkstraHeurPlayer, playerScore, opponentScore;
-    	int var = 1;
 
         
         int bridgeHeur = bridgeFactor(board, player);
@@ -354,21 +352,18 @@ class Agent41{
         	dijkstraHeurOpponent = dijkstra(board, opponent);
         	playerScore = (-1) * connectedNodes(board, player);
         	opponentScore = (-1) * connectedNodes(board, player);
-        	var = -1;
         	//int dijkstraHeurOpponent = dijkstra(board, opponent);
         }
         
-//        if(checkWinForRedPlayer(board)) {
-//        	System.out.println("RedWin1");
-//            return var*1000000;
-//        }
-//
-//        if(checkWinForBluePlayer(board)) {
-//        	System.out.println("Bluewin");
-//            return var*-1000000;
-//        }
+        if(checkWinForRedPlayer(board)) {
+            return 1000000;
+        }
+
+        if(checkWinForBluePlayer(board)) {
+            return -1000000;
+        }
 //        		(0-6000)                    (0-1650)                                                            (-5 to 5)
-        return (int) Math.round(60*bridgeHeur + 100*((1.2)*dijkstraHeurPlayer - dijkstraHeurOpponent) + 20*(playerScore - opponentScore));
+        return (int) Math.round(60*bridgeHeur + 300*(dijkstraHeurPlayer - dijkstraHeurOpponent) + 30*(playerScore - opponentScore));
         //return dijkstraHuer;
     }
 
@@ -408,33 +403,6 @@ class Agent41{
         	}
         }
 
-        
-//    	ArrayList<Hex> vertices = new ArrayList<Hex>();
-//    	for (int i = 0; i<boardSize; i++) {
-//    		for (int j = 0; j<boardSize; j++) {
-//        		vertices.add(board[i][j]);
-//        	}
-//    	}
-//    	Hex L = new Hex(-1,0,"B",0);
-//    	Hex R = new Hex(boardSize+1,0,"B",0);
-//    	Hex T = new Hex(0,boardSize+1,"R",0);
-//    	Hex D = new Hex(0,-1,"R",0);
-    	
-
-//     	if (player == "R") {
-//     		Hex source = T;
-//     		Hex destination = D;
-//     	}
-//     	else if (player == "B") {
-//     		Hex source = L;
-//     		Hex destination = R;
-//     	}
-    	
-//    	ArrayList<Hex> currentVertices = vertices;
-    	//source.pathLengthFromSource = 0;
-    	//source.pathVerticesFromSource.add(source);
-    	
-    	
     	for (int i = 0; i < boardSize; i++) {
     		for (int j = 0; j < boardSize; j++) {
     			board[i][j].setPathLengthFromSource(10000);
@@ -720,7 +688,6 @@ class Agent41{
 
         for (int i = 0; i < boardSize; i++) {
             if (visited[i][boardSize-1] == true) {
-                System.out.println("FOUND");
                 found = true;
                 break;
             }
