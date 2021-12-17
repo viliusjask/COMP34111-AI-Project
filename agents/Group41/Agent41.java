@@ -349,8 +349,10 @@ class Agent41{
         System.out.println(dijkstraHuerPlayer);
 
         int playerScore = connectedNodes(board, player);
+        //System.out.println(playerScore);
+        
         int opponentScore = connectedNodes(board, player);
-        return 6 * bridgeHeur + (playerScore - opponentScore);
+        return 6 * bridgeHeur + 100*(playerScore);
         //return dijkstraHuer;
     }
 
@@ -504,7 +506,7 @@ class Agent41{
         int length = 0;
         for (int i = 0; i < boardSize; ++i)
             for (int j = 0; j < boardSize; ++j)
-                if (board[i][j].getPlayer() == player && !visited[i][j]) 
+                if (player.equals(board[i][j].getPlayer()) && !visited[i][j]) 
                 {
                     length = DFS(board, i, j, visited, player);
                     if (length > 1)
@@ -532,9 +534,9 @@ class Agent41{
 
     public static boolean isSafe(Hex[][] board, int row, int col, boolean[][] visited, String player) 
     {
-        return row >= 0 && row < boardSize &&
+        return (row >= 0 && row < boardSize &&
                 col >= 0 & col < boardSize &&
-                !visited[row][col] && board[row][col].getPlayer() == player;
+                !visited[row][col] && player.equals(board[row][col].getPlayer()));
     }
 
     public static boolean shouldSwap(Hex firstOppMove)
@@ -629,8 +631,7 @@ class Agent41{
                 if (checkValidPosition(path2x[i]+posX, path2y[i]+posY) && board[posX + path2x[i]][posY + path2y[i]].getPlayer() == null ) {
                     // Check final bridge position valid
                     if (checkValidPosition(finalx[i]+posX, finaly[i]+posY)) {
-                        String colour_bridge = board[finalx[i]+posX][finaly[i]+posY].getPlayer();
-                        bridges.add(new Hex(posX + finalx[i], posY + finaly[i], colour_bridge, position.getHeurValue()));
+                        bridges.add(board[finalx[i]+posX][finaly[i]+posY]);
                     }
                 }
             }
@@ -667,17 +668,17 @@ class Agent41{
 
                 for (int i = 0; i < 6; i++) {
                     // Check final bridge position has same coloured piece
-                    if (checkValidPosition(finalx[i]+posX, finaly[i]+posY) && board[posX + finalx[i]][posY + finaly[i]].getPlayer() == player ) {
+                    if (checkValidPosition(finalx[i]+posX, finaly[i]+posY) && player.equals(board[posX + finalx[i]][posY + finaly[i]].getPlayer())) {
                         // Opponent in path 1, path 2 empty
-                        if (checkValidPosition(path1x[i]+posX, path1y[i]+posY) && board[posX + path1x[i]][posY + path1y[i]].getPlayer() == opponent ) {
+                        if (checkValidPosition(path1x[i]+posX, path1y[i]+posY) && opponent.equals(board[posX + path1x[i]][posY + path1y[i]].getPlayer())) {
                             if (checkValidPosition(path2x[i]+posX, path2y[i]+posY) && board[posX + path2x[i]][posY + path2y[i]].getPlayer() == null ) {
-                                bridges.add(new Hex(posX + path2x[i], posY + path2y[i], null, position.getHeurValue()));
+                                bridges.add(board[posX + path2x[i]][posY + path2y[i]]);
                             }
                         }
                         // Opponent in path 2, path 1 empty
                         else if (checkValidPosition(path1x[i]+posX, path1y[i]+posY) && board[posX + path1x[i]][posY + path1y[i]].getPlayer() == null ) {
-                            if (checkValidPosition(path2x[i]+posX, path2y[i]+posY) && board[posX + path2x[i]][posY + path2y[i]].getPlayer() == opponent ) {
-                                bridges.add(new Hex(posX + path1x[i], posY + path1y[i], null, position.getHeurValue()));
+                            if (checkValidPosition(path2x[i]+posX, path2y[i]+posY) && opponent.equals(board[posX + path2x[i]][posY + path2y[i]].getPlayer())) {
+                                bridges.add(board[posX + path1x[i]][posY + path1y[i]]);
                             }
                         }
                     }  
